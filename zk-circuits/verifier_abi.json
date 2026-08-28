@@ -1,0 +1,80 @@
+{
+  "version": "23.0.5",
+  "circuit_metadata": {
+    "logrows": 15,
+    "num_rows": 1036,
+    "input_scale": 13,
+    "param_scale": 13,
+    "input_visibility": "Private",
+    "param_visibility": "Fixed",
+    "output_visibility": "Public",
+    "vk_size_bytes": 66823
+  },
+  "public_inputs_schema": {
+    "num_public_outputs": 1,
+    "field_element_encoding": "Bn256_Fr_BigEndian_256bit",
+    "public_output_fields": [
+      {
+        "name": "collateral_appraisal_valuation",
+        "type": "FixedPointScalar",
+        "scale": 13,
+        "description": "Property valuation estimate in USD 1000s"
+      }
+    ]
+  },
+  "private_inputs_schema": [
+    {
+      "name": "square_footage",
+      "unit": "sqft",
+      "range": [
+        300,
+        15000
+      ]
+    },
+    {
+      "name": "bedrooms",
+      "unit": "count",
+      "range": [
+        1,
+        10
+      ]
+    },
+    {
+      "name": "bathrooms",
+      "unit": "count",
+      "range": [
+        1,
+        8
+      ]
+    },
+    {
+      "name": "property_age",
+      "unit": "years",
+      "range": [
+        0,
+        120
+      ]
+    },
+    {
+      "name": "location_risk_score",
+      "unit": "score",
+      "range": [
+        1,
+        100
+      ]
+    }
+  ],
+  "downstream_handoff": {
+    "person_3_midnight_compact": {
+      "verification_key_file": "zk-circuits/vk.key",
+      "public_commitment_layout": [
+        "output_scalar"
+      ]
+    },
+    "person_4_react_wasm": {
+      "proving_key_file": "zk-circuits/pk.key",
+      "srs_file": "zk-circuits/kzg.srs",
+      "compiled_circuit": "zk-circuits/model.compiled"
+    }
+  }
+}

@@ -33,8 +33,8 @@ class RealEstateValuationModel(nn.Module):
         normalized = x / self.norm_scale
         return self.net(normalized)
 
-def generate_calibration_and_input(artifacts_dir: str, num_calibration_samples: int = 60):
-    os.makedirs(artifacts_dir, exist_ok=True)
+def generate_calibration_and_input(circuits_dir: str = "zk-circuits", num_calibration_samples: int = 60):
+    os.makedirs(circuits_dir, exist_ok=True)
     
     torch.manual_seed(1337)
     # Generate realistic feature range samples
@@ -47,12 +47,12 @@ def generate_calibration_and_input(artifacts_dir: str, num_calibration_samples: 
     calib_tensor = torch.cat([sqft, beds, baths, age, location_risk], dim=1)
     calib_list = calib_tensor.numpy().tolist()
     
-    calib_path = os.path.join(artifacts_dir, "input_calibration.json")
+    calib_path = os.path.join(circuits_dir, "input_calibration.json")
     with open(calib_path, "w") as f:
         json.dump({"input_data": calib_list}, f, indent=2)
         
     sample_input = calib_list[0]
-    input_path = os.path.join(artifacts_dir, "input.json")
+    input_path = os.path.join(circuits_dir, "input.json")
     with open(input_path, "w") as f:
         json.dump({"input_data": [sample_input]}, f, indent=2)
         
@@ -60,13 +60,13 @@ def generate_calibration_and_input(artifacts_dir: str, num_calibration_samples: 
     print(f"[+] Exported sample input -> {input_path}")
     return calib_tensor
 
-def export_onnx_model(artifacts_dir: str):
-    os.makedirs(artifacts_dir, exist_ok=True)
+def export_onnx_model(circuits_dir: str = "zk-circuits"):
+    os.makedirs(circuits_dir, exist_ok=True)
     model = RealEstateValuationModel()
     model.eval()
     
     dummy_input = torch.tensor([[2500.0, 3.0, 2.5, 15.0, 25.0]], dtype=torch.float32)
-    onnx_path = os.path.join(artifacts_dir, "model.onnx")
+    onnx_path = os.path.join(circuits_dir, "model.onnx")
     
     torch.onnx.export(
         model,
@@ -83,6 +83,6 @@ def export_onnx_model(artifacts_dir: str):
     return model, onnx_path
 
 if __name__ == "__main__":
-    artifacts = os.path.abspath("artifacts")
-    model, onnx_file = export_onnx_model(artifacts)
-    generate_calibration_and_input(artifacts)
+    circuits = os.path.abspath("zk-circuits")
+    model, onnx_file = export_onnx_model(circuits)
+    generate_calibration_and_input(circuits)

@@ -13,17 +13,17 @@ from src.circuit_builder import build_circuit_pipeline
 if "HOME" not in os.environ and "USERPROFILE" in os.environ:
     os.environ["HOME"] = os.environ["USERPROFILE"]
 
-ARTIFACTS_DIR = os.path.abspath("artifacts")
+CIRCUITS_DIR = os.path.abspath("zk-circuits")
 REPORTS_DIR = os.path.abspath("reports")
 
 @pytest.fixture(scope="module")
 def setup_pipeline():
-    os.makedirs(ARTIFACTS_DIR, exist_ok=True)
+    os.makedirs(CIRCUITS_DIR, exist_ok=True)
     os.makedirs(REPORTS_DIR, exist_ok=True)
     
-    model, onnx_file = export_onnx_model(ARTIFACTS_DIR)
-    generate_calibration_and_input(ARTIFACTS_DIR)
-    pipeline_res = build_circuit_pipeline(ARTIFACTS_DIR)
+    model, onnx_file = export_onnx_model(CIRCUITS_DIR)
+    generate_calibration_and_input(CIRCUITS_DIR)
+    pipeline_res = build_circuit_pipeline(CIRCUITS_DIR)
     return model, pipeline_res
 
 def test_numerical_fidelity_15k(setup_pipeline):
@@ -44,7 +44,10 @@ def test_numerical_fidelity_15k(setup_pipeline):
     with torch.no_grad():
         float_preds = model(features).numpy().flatten()
         
-    scale = 2 ** 13  # input_scale / param_scale calibrated = 13
+    with open(pipeline_res["settings"], "r") as f:
+        settings_data = json.load(f)
+    input_scale = settings_data["run_args"]["input_scale"]
+    scale = 2 ** input_scale
     quant_features = torch.round(features / model.norm_scale * scale) / scale * model.norm_scale
     with torch.no_grad():
         quant_preds = model(quant_features).numpy().flatten()
@@ -71,8 +74,8 @@ def test_mock_proving_soundness(setup_pipeline):
     ]
     
     for idx, sample in enumerate(boundary_cases):
-        sample_path = os.path.join(ARTIFACTS_DIR, f"boundary_{idx}.json")
-        witness_path = os.path.join(ARTIFACTS_DIR, f"boundary_witness_{idx}.json")
+        sample_path = os.path.join(CIRCUITS_DIR, f"boundary_{idx}.json")
+        witness_path = os.path.join(CIRCUITS_DIR, f"boundary_witness_{idx}.json")
         
         with open(sample_path, "w") as f:
             json.dump({"input_data": [sample]}, f)
@@ -85,9 +88,9 @@ def test_adversarial_witness_rejection(setup_pipeline):
     _, pipeline_res = setup_pipeline
     compiled_path = pipeline_res["compiled"]
     
-    input_path = os.path.join(ARTIFACTS_DIR, "input.json")
-    witness_path = os.path.join(ARTIFACTS_DIR, "valid_witness.json")
-    tampered_witness_path = os.path.join(ARTIFACTS_DIR, "tampered_witness.json")
+    input_path = os.path.join(CIRCUITS_DIR, "input.json")
+    witness_path = os.path.join(CIRCUITS_DIR, "valid_witness.json")
+    tampered_witness_path = os.path.join(CIRCUITS_DIR, "tampered_witness.json")
     
     ezkl.gen_witness(input_path, compiled_path, witness_path)
     
@@ -95,7 +98,6 @@ def test_adversarial_witness_rejection(setup_pipeline):
         witness_data = json.load(f)
         
     # Corrupt output field element to simulate altered appraisal prediction
-    original_output = witness_data["outputs"][0][0]
     corrupted_output = "0x" + "f" * 64
     witness_data["outputs"][0][0] = corrupted_output
     
@@ -109,8 +111,8 @@ def test_adversarial_witness_rejection(setup_pipeline):
 def test_resource_profiling_report(setup_pipeline):
     _, pipeline_res = setup_pipeline
     compiled_path = pipeline_res["compiled"]
-    input_path = os.path.join(ARTIFACTS_DIR, "input.json")
-    witness_path = os.path.join(ARTIFACTS_DIR, "profile_witness.json")
+    input_path = os.path.join(CIRCUITS_DIR, "input.json")
+    witness_path = os.path.join(CIRCUITS_DIR, "profile_witness.json")
     
     proc = psutil.Process()
     mem_before = proc.memory_info().rss / (1024 * 1024)

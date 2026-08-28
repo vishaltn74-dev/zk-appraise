@@ -1,12 +1,12 @@
 import os
 import json
 
-def export_verifier_abi(artifacts_dir: str):
-    os.makedirs(artifacts_dir, exist_ok=True)
+def export_verifier_abi(circuits_dir: str = "zk-circuits"):
+    os.makedirs(circuits_dir, exist_ok=True)
     
-    settings_path = os.path.join(artifacts_dir, "settings.json")
-    vk_path = os.path.join(artifacts_dir, "vk.key")
-    abi_path = os.path.join(artifacts_dir, "verifier_abi.json")
+    settings_path = os.path.join(circuits_dir, "settings.json")
+    vk_path = os.path.join(circuits_dir, "vk.key")
+    abi_path = os.path.join(circuits_dir, "verifier_abi.json")
     
     if not os.path.exists(settings_path):
         raise FileNotFoundError(f"Circuit settings missing at {settings_path}")
@@ -51,13 +51,13 @@ def export_verifier_abi(artifacts_dir: str):
         ],
         "downstream_handoff": {
             "person_3_midnight_compact": {
-                "verification_key_file": "vk.key",
+                "verification_key_file": "zk-circuits/vk.key",
                 "public_commitment_layout": ["output_scalar"]
             },
             "person_4_react_wasm": {
-                "proving_key_file": "pk.key",
-                "srs_file": "kzg.srs",
-                "compiled_circuit": "model.compiled"
+                "proving_key_file": "zk-circuits/pk.key",
+                "srs_file": "zk-circuits/kzg.srs",
+                "compiled_circuit": "zk-circuits/model.compiled"
             }
         }
     }
@@ -69,6 +69,6 @@ def export_verifier_abi(artifacts_dir: str):
     return abi_spec
 
 if __name__ == "__main__":
-    artifacts = os.path.abspath("artifacts")
-    abi = export_verifier_abi(artifacts)
+    circuits = os.path.abspath("zk-circuits")
+    abi = export_verifier_abi(circuits)
     print(f"[+] Verifier ABI ready: {json.dumps(abi['circuit_metadata'], indent=2)}")

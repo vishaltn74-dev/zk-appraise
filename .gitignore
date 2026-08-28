@@ -223,7 +223,14 @@ __marimo__/
 artifacts/
 reports/
 
-# Markdown files except README.md
+# Ignore heavy binary circuit artifacts (large PK/SRS)
+zk-circuits/*.key
+zk-circuits/*.srs
+zk-circuits/*.compiled
+
+# Markdown files except core documentation
 *.md
 !README.md
+!PLAN.md
+!AGENTS.md
 

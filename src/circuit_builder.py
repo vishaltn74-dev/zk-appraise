@@ -7,16 +7,16 @@ import ezkl
 if "HOME" not in os.environ and "USERPROFILE" in os.environ:
     os.environ["HOME"] = os.environ["USERPROFILE"]
 
-def build_circuit_pipeline(artifacts_dir: str):
-    os.makedirs(artifacts_dir, exist_ok=True)
+def build_circuit_pipeline(circuits_dir: str = "zk-circuits"):
+    os.makedirs(circuits_dir, exist_ok=True)
     
-    model_path = os.path.abspath(os.path.join(artifacts_dir, "model.onnx"))
-    settings_path = os.path.abspath(os.path.join(artifacts_dir, "settings.json"))
-    calibration_path = os.path.abspath(os.path.join(artifacts_dir, "input_calibration.json"))
-    compiled_path = os.path.abspath(os.path.join(artifacts_dir, "model.compiled"))
-    srs_path = os.path.abspath(os.path.join(artifacts_dir, "kzg.srs"))
-    pk_path = os.path.abspath(os.path.join(artifacts_dir, "pk.key"))
-    vk_path = os.path.abspath(os.path.join(artifacts_dir, "vk.key"))
+    model_path = os.path.abspath(os.path.join(circuits_dir, "model.onnx"))
+    settings_path = os.path.abspath(os.path.join(circuits_dir, "settings.json"))
+    calibration_path = os.path.abspath(os.path.join(circuits_dir, "input_calibration.json"))
+    compiled_path = os.path.abspath(os.path.join(circuits_dir, "model.compiled"))
+    srs_path = os.path.abspath(os.path.join(circuits_dir, "kzg.srs"))
+    pk_path = os.path.abspath(os.path.join(circuits_dir, "pk.key"))
+    vk_path = os.path.abspath(os.path.join(circuits_dir, "vk.key"))
     
     if not os.path.exists(model_path):
         raise FileNotFoundError(f"ONNX model file not found at {model_path}. Run src/model_gen.py first.")
@@ -65,6 +65,6 @@ def build_circuit_pipeline(artifacts_dir: str):
     }
 
 if __name__ == "__main__":
-    artifacts = os.path.abspath("artifacts")
-    res = build_circuit_pipeline(artifacts)
+    circuits = os.path.abspath("zk-circuits")
+    res = build_circuit_pipeline(circuits)
     print(f"[✓] Circuit setup complete: {res}")
