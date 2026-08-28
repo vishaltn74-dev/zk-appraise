@@ -216,3 +216,14 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+.cursor/
+
+# Project generated artifacts & reports
+artifacts/
+reports/
+
+# Markdown files except README.md
+*.md
+!README.md
+
