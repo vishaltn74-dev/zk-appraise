@@ -1,24 +1,35 @@
 // Midnight Compact Contract: NullifierRegistry
-// Prevents duplicate property collateralization and replay attacks via nullifier tracking
+// Prevents duplicate property collateralization and replay attacks via domain-separated nullifier tracking
 
 pragma language_version >= 0.14.0;
 
 import CompactStandardLibrary;
 
+export const DOMAIN_SEPARATOR_V1: Bytes<32> = 0x5a4b5f41505052414953455f4e554c4c49464945525f56315f4d49444e49474854;
+
 export ledger state {
-    registered_nullifiers: Cell<Map<Bytes<32>, Boolean>>
+    registered_nullifiers: Cell<Map<Bytes<32>, Boolean>>,
+    total_nullifiers_count: Uint<64>
 }
 
 export circuit register_nullifier(nullifier: Bytes<32>): Boolean {
-    // Assert nullifier has not been previously registered
+    // Assert nullifier has not been previously registered in state
     const is_used = registered_nullifiers.lookup(nullifier).unwrap_or(false);
     assert !is_used "Nullifier replay attack detected: collateral already pledged";
     
-    // Register nullifier state
+    // Register nullifier in persistent ledger state
     registered_nullifiers.insert(nullifier, true);
+    total_nullifiers_count += 1;
     return true;
 }
 
 export circuit is_nullifier_active(nullifier: Bytes<32>): Boolean {
     return registered_nullifiers.lookup(nullifier).unwrap_or(false);
+}
+
+export circuit construct_domain_nullifier(
+    owner_secret_nonce: Bytes<32>,
+    property_hash: Bytes<32>
+): Bytes<32> {
+    return sha256(concat(DOMAIN_SEPARATOR_V1, concat(owner_secret_nonce, property_hash)));
 }

@@ -1,19 +1,17 @@
 import React, { useState } from 'react';
-
-export interface PropertyInputs {
-  sqft: number;
-  bedrooms: number;
-  bathrooms: number;
-  age: number;
-  locationRisk: number;
-}
+import { PropertyInputs, ProverProgress } from '../workers/prover.worker';
 
 interface PropertyIntakeFormProps {
   onSubmit: (inputs: PropertyInputs) => void;
   isLoading: boolean;
+  progress?: ProverProgress | null;
 }
 
-export const PropertyIntakeForm: React.FC<PropertyIntakeFormProps> = ({ onSubmit, isLoading }) => {
+export const PropertyIntakeForm: React.FC<PropertyIntakeFormProps> = ({
+  onSubmit,
+  isLoading,
+  progress,
+}) => {
   const [formData, setFormData] = useState<PropertyInputs>({
     sqft: 2500,
     bedrooms: 3,
@@ -47,7 +45,10 @@ export const PropertyIntakeForm: React.FC<PropertyIntakeFormProps> = ({ onSubmit
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-1">Square Footage (sq ft)</label>
+          <div className="flex justify-between items-center mb-1">
+            <label className="block text-sm font-medium text-slate-300">Square Footage (sq ft)</label>
+            <span className="text-xs text-slate-500 font-mono">300 - 15,000</span>
+          </div>
           <input
             type="number"
             name="sqft"
@@ -55,14 +56,18 @@ export const PropertyIntakeForm: React.FC<PropertyIntakeFormProps> = ({ onSubmit
             max="15000"
             value={formData.sqft}
             onChange={handleChange}
-            className="w-full bg-slate-950 border border-slate-700 rounded-lg px-4 py-2.5 text-white focus:ring-2 focus:ring-cyan-500 focus:outline-none"
+            disabled={isLoading}
+            className="w-full bg-slate-950 border border-slate-700 rounded-lg px-4 py-2.5 text-white focus:ring-2 focus:ring-cyan-500 focus:outline-none disabled:opacity-50"
             required
           />
         </div>
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1">Bedrooms</label>
+            <div className="flex justify-between items-center mb-1">
+              <label className="block text-sm font-medium text-slate-300">Bedrooms</label>
+              <span className="text-xs text-slate-500 font-mono">1 - 10</span>
+            </div>
             <input
               type="number"
               name="bedrooms"
@@ -70,12 +75,16 @@ export const PropertyIntakeForm: React.FC<PropertyIntakeFormProps> = ({ onSubmit
               max="10"
               value={formData.bedrooms}
               onChange={handleChange}
-              className="w-full bg-slate-950 border border-slate-700 rounded-lg px-4 py-2.5 text-white focus:ring-2 focus:ring-cyan-500 focus:outline-none"
+              disabled={isLoading}
+              className="w-full bg-slate-950 border border-slate-700 rounded-lg px-4 py-2.5 text-white focus:ring-2 focus:ring-cyan-500 focus:outline-none disabled:opacity-50"
               required
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1">Bathrooms</label>
+            <div className="flex justify-between items-center mb-1">
+              <label className="block text-sm font-medium text-slate-300">Bathrooms</label>
+              <span className="text-xs text-slate-500 font-mono">1 - 8</span>
+            </div>
             <input
               type="number"
               step="0.5"
@@ -84,7 +93,8 @@ export const PropertyIntakeForm: React.FC<PropertyIntakeFormProps> = ({ onSubmit
               max="8"
               value={formData.bathrooms}
               onChange={handleChange}
-              className="w-full bg-slate-950 border border-slate-700 rounded-lg px-4 py-2.5 text-white focus:ring-2 focus:ring-cyan-500 focus:outline-none"
+              disabled={isLoading}
+              className="w-full bg-slate-950 border border-slate-700 rounded-lg px-4 py-2.5 text-white focus:ring-2 focus:ring-cyan-500 focus:outline-none disabled:opacity-50"
               required
             />
           </div>
@@ -92,7 +102,10 @@ export const PropertyIntakeForm: React.FC<PropertyIntakeFormProps> = ({ onSubmit
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1">Property Age (years)</label>
+            <div className="flex justify-between items-center mb-1">
+              <label className="block text-sm font-medium text-slate-300">Property Age (years)</label>
+              <span className="text-xs text-slate-500 font-mono">0 - 120</span>
+            </div>
             <input
               type="number"
               name="age"
@@ -100,12 +113,16 @@ export const PropertyIntakeForm: React.FC<PropertyIntakeFormProps> = ({ onSubmit
               max="120"
               value={formData.age}
               onChange={handleChange}
-              className="w-full bg-slate-950 border border-slate-700 rounded-lg px-4 py-2.5 text-white focus:ring-2 focus:ring-cyan-500 focus:outline-none"
+              disabled={isLoading}
+              className="w-full bg-slate-950 border border-slate-700 rounded-lg px-4 py-2.5 text-white focus:ring-2 focus:ring-cyan-500 focus:outline-none disabled:opacity-50"
               required
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1">Location Risk Rating (1-100)</label>
+            <div className="flex justify-between items-center mb-1">
+              <label className="block text-sm font-medium text-slate-300">Location Risk (1-100)</label>
+              <span className="text-xs text-slate-500 font-mono">1 - 100</span>
+            </div>
             <input
               type="number"
               name="locationRisk"
@@ -113,16 +130,37 @@ export const PropertyIntakeForm: React.FC<PropertyIntakeFormProps> = ({ onSubmit
               max="100"
               value={formData.locationRisk}
               onChange={handleChange}
-              className="w-full bg-slate-950 border border-slate-700 rounded-lg px-4 py-2.5 text-white focus:ring-2 focus:ring-cyan-500 focus:outline-none"
+              disabled={isLoading}
+              className="w-full bg-slate-950 border border-slate-700 rounded-lg px-4 py-2.5 text-white focus:ring-2 focus:ring-cyan-500 focus:outline-none disabled:opacity-50"
               required
             />
           </div>
         </div>
 
+        {/* Real-time Prover Worker Streaming Progress Bar */}
+        {isLoading && progress && (
+          <div className="mt-4 p-4 rounded-lg bg-slate-950 border border-cyan-900/50 space-y-2">
+            <div className="flex justify-between text-xs font-mono text-cyan-400">
+              <span className="truncate">{progress.message}</span>
+              <span className="font-bold">{progress.progressPct}%</span>
+            </div>
+            <div className="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+              <div
+                className="bg-gradient-to-r from-cyan-500 to-blue-500 h-full rounded-full transition-all duration-300 ease-out"
+                style={{ width: `${progress.progressPct}%` }}
+              />
+            </div>
+            <div className="text-[11px] text-slate-400 flex items-center justify-between">
+              <span>Stage: <span className="text-slate-200">{progress.stage}</span></span>
+              <span>Worker: <span className="text-emerald-400">Active (Wasm)</span></span>
+            </div>
+          </div>
+        )}
+
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full mt-6 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-semibold py-3 px-6 rounded-lg transition-all shadow-lg hover:shadow-cyan-500/25 disabled:opacity-50"
+          className="w-full mt-6 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-semibold py-3 px-6 rounded-lg transition-all shadow-lg hover:shadow-cyan-500/25 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isLoading ? 'Synthesizing Local ZK Proof...' : 'Synthesize Local ZK Valuation Proof'}
         </button>

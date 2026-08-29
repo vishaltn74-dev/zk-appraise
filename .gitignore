@@ -231,10 +231,16 @@ zk-circuits/*witness*.json
 zk-circuits/boundary_*.json
 zk-circuits/extreme_*.json
 
+# Node / Frontend
+node_modules/
+dist/
+.vite/
+
 # Markdown files except core documentation
 *.md
 !README.md
 !PLAN.md
 !AGENTS.md
 !mergingplan.md
+!CRYPTO_REMAINING_PLAN.md
 

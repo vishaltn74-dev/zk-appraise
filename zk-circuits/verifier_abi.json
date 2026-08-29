@@ -5,22 +5,41 @@
     "num_rows": 1036,
     "input_scale": 13,
     "param_scale": 13,
+    "scale_power": 13,
+    "scale_factor_multiplier": 8192,
     "input_visibility": "Private",
     "param_visibility": "Fixed",
     "output_visibility": "Public",
-    "vk_size_bytes": 66823
+    "vk_size_bytes": 66823,
+    "vk_commitment_hash": "0x5433e6b9f0b860c499bc256306501775481648605486fbfedb5bf6355b799d5c"
   },
   "public_inputs_schema": {
-    "num_public_outputs": 1,
-    "field_element_encoding": "Bn256_Fr_BigEndian_256bit",
-    "public_output_fields": [
+    "tuple_format": "[quantized_valuation_scalar, scale_factor, vk_commitment]",
+    "num_public_elements": 3,
+    "fields": [
       {
-        "name": "collateral_appraisal_valuation",
-        "type": "FixedPointScalar",
-        "scale": 13,
-        "description": "Property valuation estimate in USD 1000s"
+        "index": 0,
+        "name": "quantized_valuation_scalar",
+        "type": "Uint<64>",
+        "description": "Quantized real estate appraisal valuation output (y_val = val * 2^S)"
+      },
+      {
+        "index": 1,
+        "name": "scale_factor",
+        "type": "Uint<64>",
+        "description": "Quantization multiplier factor (2^13 = 8192)"
+      },
+      {
+        "index": 2,
+        "name": "vk_commitment",
+        "type": "Bytes<32>",
+        "description": "SHA-256 hash commitment of the frozen verification key vk.key"
       }
-    ]
+    ],
+    "dequantization_rule": {
+      "safe_multiplicative_check": "quantized_valuation_scalar >= min_required_threshold_usd * scale_factor",
+      "notes": "Prevents integer truncation and division-by-zero"
+    }
   },
   "private_inputs_schema": [
     {
@@ -64,11 +83,19 @@
       ]
     }
   ],
+  "compact_contract_bindings": {
+    "verifier_circuit": "AppraisalVerifier.compact",
+    "proof_type": "Bytes<512>",
+    "nullifier_schema": "sha256(concat(DOMAIN_SEPARATOR, owner_secret_nonce, property_hash))"
+  },
   "downstream_handoff": {
     "person_3_midnight_compact": {
       "verification_key_file": "zk-circuits/vk.key",
+      "vk_commitment": "0x5433e6b9f0b860c499bc256306501775481648605486fbfedb5bf6355b799d5c",
       "public_commitment_layout": [
-        "output_scalar"
+        "quantized_valuation_scalar",
+        "scale_factor",
+        "vk_commitment"
       ]
     },
     "person_4_react_wasm": {

@@ -36,11 +36,12 @@ def test_e2e_circuit_compilation_and_abi_export():
     assert os.path.exists(pipeline_res["pk"]), "Proving key file missing"
     assert os.path.exists(pipeline_res["vk"]), "Verification key file missing"
     
-    # 4. Verifier ABI serialization
+    # 4. Verifier ABI serialization & Phase 3 Compact public input marshaling
     abi = export_verifier_abi(CIRCUITS_DIR)
     assert abi["circuit_metadata"]["logrows"] == pipeline_res["logrows"]
     assert len(abi["private_inputs_schema"]) == 5
-    assert abi["public_inputs_schema"]["num_public_outputs"] == 1
+    assert abi["public_inputs_schema"]["num_public_elements"] == 3
+    assert abi["circuit_metadata"]["vk_commitment_hash"].startswith("0x")
     
     # 5. Proof & witness sanity check
     input_path = os.path.join(CIRCUITS_DIR, "input.json")

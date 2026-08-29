@@ -6,25 +6,29 @@ pragma language_version >= 0.14.0;
 import CompactStandardLibrary;
 
 export ledger state {
-    total_collateral_locked: Uint<64>,
-    active_loans_count: Uint<64>
+    total_collateral_locked_usd: Uint<64>,
+    active_loans_count: Uint<64>,
+    total_loaned_principal_usd: Uint<64>
 }
 
 export circuit request_loan_disbursement(
     appraisal_proof: Bytes<512>,
     verified_valuation_usd: Uint<64>,
     requested_loan_amount_usd: Uint<64>,
-    nullifier_hash: Bytes<32>
+    nullifier_hash: Bytes<32>,
+    vk_commitment: Bytes<32>
 ): Uint<64> {
-    // Enforce 75% Maximum Loan-to-Value (LTV) Ratio:
-    // requested_loan <= verified_valuation * 75 / 100
+    // 1. Enforce 75% Maximum Loan-to-Value (LTV) Ratio:
+    // requested_loan_amount_usd <= (verified_valuation_usd * 75) / 100
     const max_eligible_loan = (verified_valuation_usd * 75) / 100;
     
     assert requested_loan_amount_usd <= max_eligible_loan "Requested loan amount exceeds 75% LTV limit";
     assert requested_loan_amount_usd > 0 "Loan amount must be strictly positive";
+    assert verified_valuation_usd > 0 "Collateral valuation must be positive";
     
-    // Increment protocol stats
-    total_collateral_locked += verified_valuation_usd;
+    // 2. Increment protocol pool accounting
+    total_collateral_locked_usd += verified_valuation_usd;
+    total_loaned_principal_usd += requested_loan_amount_usd;
     active_loans_count += 1;
     
     return requested_loan_amount_usd;
