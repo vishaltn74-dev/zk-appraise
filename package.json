@@ -1,0 +1,27 @@
+{
+  "name": "zk-appraise",
+  "version": "1.0.0",
+  "description": "ZK-Appraise: A ZKML app enabling home equity borrowers to prove DeFi loan collateral eligibility via local AI real estate valuations. It generates cryptographic proofs without exposing raw property specs or addresses to public ledgers.  Tech Stack: Python/ONNX, EZKL, Midnight Compact, React.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vishaltn74-dev/zk-appraise.git"
+  },
+  "keywords": [],
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/vishaltn74-dev/zk-appraise/issues"
+  },
+  "homepage": "https://github.com/vishaltn74-dev/zk-appraise#readme",
+  "devDependencies": {
+    "@types/node": "^26.4.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "@midnight-ntwrk/midnight-js": "^4.1.1"
+  }
+}
