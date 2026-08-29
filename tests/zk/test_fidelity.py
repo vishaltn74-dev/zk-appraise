@@ -5,13 +5,18 @@ import psutil
 import pytest
 import torch
 import numpy as np
+import sys
 import ezkl
-from src.model_gen import RealEstateValuationModel, export_onnx_model, generate_calibration_and_input
-from src.circuit_builder import build_circuit_pipeline
 
-# Ensure Windows compatibility by setting HOME env var
+# Ensure Windows compatibility by setting HOME env var and adding zk-circuits to sys.path
 if "HOME" not in os.environ and "USERPROFILE" in os.environ:
     os.environ["HOME"] = os.environ["USERPROFILE"]
+
+sys.path.insert(0, os.path.abspath("zk-circuits"))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../zk-circuits")))
+
+from src.model_gen import RealEstateValuationModel, export_onnx_model, generate_calibration_and_input
+from src.circuit_builder import build_circuit_pipeline
 
 CIRCUITS_DIR = os.path.abspath("zk-circuits")
 REPORTS_DIR = os.path.abspath("reports")

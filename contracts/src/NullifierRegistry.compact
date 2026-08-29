@@ -1,0 +1,24 @@
+// Midnight Compact Contract: NullifierRegistry
+// Prevents duplicate property collateralization and replay attacks via nullifier tracking
+
+pragma language_version >= 0.14.0;
+
+import CompactStandardLibrary;
+
+export ledger state {
+    registered_nullifiers: Cell<Map<Bytes<32>, Boolean>>
+}
+
+export circuit register_nullifier(nullifier: Bytes<32>): Boolean {
+    // Assert nullifier has not been previously registered
+    const is_used = registered_nullifiers.lookup(nullifier).unwrap_or(false);
+    assert !is_used "Nullifier replay attack detected: collateral already pledged";
+    
+    // Register nullifier state
+    registered_nullifiers.insert(nullifier, true);
+    return true;
+}
+
+export circuit is_nullifier_active(nullifier: Bytes<32>): Boolean {
+    return registered_nullifiers.lookup(nullifier).unwrap_or(false);
+}

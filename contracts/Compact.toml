@@ -1,0 +1,13 @@
+[package]
+name = "zk-appraise-contracts"
+version = "0.1.0"
+edition = "2024"
+authors = ["ZK-Appraise Cryptography Team"]
+
+[dependencies]
+# Compact runtime dependencies for Midnight Network
+compact-std = "0.14.0"
+
+[contract]
+name = "LoanCollateralPool"
+source = "src/LoanCollateralPool.compact"

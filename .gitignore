@@ -227,10 +227,14 @@ reports/
 zk-circuits/*.key
 zk-circuits/*.srs
 zk-circuits/*.compiled
+zk-circuits/*witness*.json
+zk-circuits/boundary_*.json
+zk-circuits/extreme_*.json
 
 # Markdown files except core documentation
 *.md
 !README.md
 !PLAN.md
 !AGENTS.md
+!mergingplan.md
 

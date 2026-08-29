@@ -67,4 +67,4 @@ def build_circuit_pipeline(circuits_dir: str = "zk-circuits"):
 if __name__ == "__main__":
     circuits = os.path.abspath("zk-circuits")
     res = build_circuit_pipeline(circuits)
-    print(f"[✓] Circuit setup complete: {res}")
+    print(f"[+] Circuit setup complete: {res}")
