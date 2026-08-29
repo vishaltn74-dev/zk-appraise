@@ -1,0 +1,178 @@
+{
+  "manifest-version": "1",
+  "compiler-version": "0.34.0",
+  "language-version": "0.26.0",
+  "runtime-version": "0.19.0",
+  "compiler": {
+    "type": "directory",
+    "contract-info.json": {
+      "type": "file",
+      "size": 11474,
+      "hash": "e6e7e8aca04c252a8cb8294bd5e3fd84c9795f0c8f0eb46840dc8785f1254a3a"
+    }
+  },
+  "contract": {
+    "type": "directory",
+    "index.d.ts": {
+      "type": "file",
+      "size": 9043,
+      "hash": "75fcc8cbbddf40f0cdb5380abc03732c77a56fb91656fbbf0dbf56339bfe35bd"
+    },
+    "index.js": {
+      "type": "file",
+      "size": 161349,
+      "hash": "0e9d4c6937affb344877f8d2931a89aa78c981f37a7ec881dae77022f4344664"
+    },
+    "index.js.map": {
+      "type": "file",
+      "size": 6503,
+      "hash": "2702763b2ca7dc9c668ede8db0a26459f4dab93268f48c9f396e04912a042e2a"
+    }
+  },
+  "zkir": {
+    "type": "directory",
+    "blacklistUser.bzkir": {
+      "type": "file",
+      "size": 206,
+      "hash": "1c3298a727601a42a34e20ff1aeb09218a577edae569106ea02aaf0f4941ab81"
+    },
+    "blacklistUser.zkir": {
+      "type": "file",
+      "size": 2973,
+      "hash": "0ef1603b71edae78b8be5dc0defe7fec25d1f08f36b90a814e9127ea2f637652"
+    },
+    "changePin.bzkir": {
+      "type": "file",
+      "size": 393,
+      "hash": "f009edb9696aa14d28e35f96523ef87f9264a9a4bf456424194cf82de72852e4"
+    },
+    "changePin.zkir": {
+      "type": "file",
+      "size": 5847,
+      "hash": "4c37be5c7df856b6cc04e0b5d68ee470d62db03b366906a22131a6933ca53ba5"
+    },
+    "registerAppraisal.bzkir": {
+      "type": "file",
+      "size": 275,
+      "hash": "4c7c35d53ac2048247b17c8b6f852ab9e463ff3061b9228e334d01762f80f69a"
+    },
+    "registerAppraisal.zkir": {
+      "type": "file",
+      "size": 4135,
+      "hash": "5d63d47f7f743f95fe4c05ad375e54e34a0256f69cd9f8ecdd4bb4793266d4f2"
+    },
+    "registerProvider.bzkir": {
+      "type": "file",
+      "size": 307,
+      "hash": "fd642735aaef376dbd6521ec3a4f1355509ed7a4a7690d70dbe417c676f9bd06"
+    },
+    "registerProvider.zkir": {
+      "type": "file",
+      "size": 4286,
+      "hash": "4e43c6ce41ea45a519f320dcbdea6119013183299b892437137189c3b9bb091e"
+    },
+    "requestAppraisalVerification.bzkir": {
+      "type": "file",
+      "size": 1459,
+      "hash": "d73e2b5b7578e6f8b456478e7be8533f4410828690967a50e0f2afda8a5cc4e1"
+    },
+    "requestAppraisalVerification.zkir": {
+      "type": "file",
+      "size": 20225,
+      "hash": "7633b49a2b684434316ab7f88ac20e9604963e3d6e480061a5f376dbd24fe337"
+    },
+    "respondToLoan.bzkir": {
+      "type": "file",
+      "size": 384,
+      "hash": "bd982ba530a34b06055e671dedbe942d217919d1a8332370e179b727677920af"
+    },
+    "respondToLoan.zkir": {
+      "type": "file",
+      "size": 6489,
+      "hash": "da7c87082af43a53f330aa5c5f7d6a66c5d0af93f1851d8e7d53c1515d076828"
+    },
+    "rotateAdmin.bzkir": {
+      "type": "file",
+      "size": 223,
+      "hash": "f353d8d1f60b4af7f0a7d3c5d2a08996ab2a621bc7277cfbb9f8e590f7d5c7e3"
+    },
+    "rotateAdmin.zkir": {
+      "type": "file",
+      "size": 3288,
+      "hash": "c40789f7515151660406c67f3934bae627e6f09e762d9b6bac453473f4ee9b12"
+    }
+  },
+  "keys": {
+    "type": "directory",
+    "blacklistUser.prover": {
+      "type": "file",
+      "size": 2820441,
+      "hash": "7484950b8f426c46f5f7ec73e0cf9826fae9e0c705e5292843ebbd6d7ca57336"
+    },
+    "blacklistUser.verifier": {
+      "type": "file",
+      "size": 2119,
+      "hash": "7a03dd9bf37f96e31b062d768168d34d87e286010cb0fcebbf203799d035a273"
+    },
+    "changePin.prover": {
+      "type": "file",
+      "size": 5221502,
+      "hash": "c9f178c3d374381b68053746d216e63f3d61b216f65fced6092d475a58b03d93"
+    },
+    "changePin.verifier": {
+      "type": "file",
+      "size": 2119,
+      "hash": "32cfa64767577d2570d4b224f006deb1a1d9e77c3884400a2bfd1b8e56e76e1b"
+    },
+    "registerAppraisal.prover": {
+      "type": "file",
+      "size": 2823883,
+      "hash": "6cb18065b2e1182c68141ef96c96b8d7b870c90df3c862969abb3421edd1c1eb"
+    },
+    "registerAppraisal.verifier": {
+      "type": "file",
+      "size": 2119,
+      "hash": "fb99aabe54623c6827474c418bdfb6675ec09577377d28e3fb8baf401e039d11"
+    },
+    "registerProvider.prover": {
+      "type": "file",
+      "size": 2820373,
+      "hash": "cd2894215361871eaedfbdd5bb764dce431b0431789352293864c6bb2483e51a"
+    },
+    "registerProvider.verifier": {
+      "type": "file",
+      "size": 2119,
+      "hash": "8fce47038fb8b7b2bb9eeedf6d6348d7d0c184d7747279f661ad6fb2cec05567"
+    },
+    "requestAppraisalVerification.prover": {
+      "type": "file",
+      "size": 10008019,
+      "hash": "d9d034e6476616e23bb6da6ab307c667aad911fec1a11d6069e817e2d39ceca0"
+    },
+    "requestAppraisalVerification.verifier": {
+      "type": "file",
+      "size": 2119,
+      "hash": "8a47bb97849ce35929d2818f4bdcbeb2b713f3fe1509ea5e981c39c20d0e753f"
+    },
+    "respondToLoan.prover": {
+      "type": "file",
+      "size": 2827081,
+      "hash": "753e4faf6e21700ba8db55fcda8e2b205f429eb8f6b4b954d83c3b271a9c69c8"
+    },
+    "respondToLoan.verifier": {
+      "type": "file",
+      "size": 2119,
+      "hash": "4178c4d5d4211eec3039a535022c08c5317065230bd6cafeaa0203df63118170"
+    },
+    "rotateAdmin.prover": {
+      "type": "file",
+      "size": 2820468,
+      "hash": "dbe35463a9644198872575893fda58a9a2be7691c5ca24289dec8aa49c98f68b"
+    },
+    "rotateAdmin.verifier": {
+      "type": "file",
+      "size": 2119,
+      "hash": "2d6ed99aa31c33e350c5a4e41bc20367675942307d513c7cd5cca07fb7efd2a9"
+    }
+  }
+}

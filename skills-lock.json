@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "skills": {
+    "compact": {
+      "source": "Kali-Decoder/Midnight-skills",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/compact/SKILL.md",
+      "computedHash": "4eeaf67f9317a4e14db2d94541ee17edf52aa6ab9482085ac3a4ba9480ad5791"
+    },
+    "example-zk-loan-application": {
+      "source": "Kali-Decoder/Midnight-skills",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/example-zk-loan-application/SKILL.md",
+      "computedHash": "9594da2df9b400610be300c11816d30581db8479e32e4f10db7c5f1ab3a2829f"
+    },
+    "midnight-environment-setup": {
+      "source": "Kali-Decoder/Midnight-skills",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/midnight-environment-setup/SKILL.md",
+      "computedHash": "491bbe462a7b3f45688d887c2bbd6226adf9a73e45ea3d46f58e8d6e5386b476"
+    },
+    "midnight-security": {
+      "source": "Kali-Decoder/Midnight-skills",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/security/SKILL.md",
+      "computedHash": "cd641be8769c08b50fab93e2f26052019572326272376f83c0171f4d843a3677"
+    },
+    "testing": {
+      "source": "Kali-Decoder/Midnight-skills",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/testing/SKILL.md",
+      "computedHash": "210509d75d00a12b7ca4ffb3fe45f59bd9a808583d2f8c472005dbbc59ca030a"
+    }
+  }
+}
