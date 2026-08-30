@@ -1,11 +1,11 @@
 # Graph Report - zk-appraise  (2026-08-30)
 
 ## Corpus Check
-- 94 files · ~58,019 words
+- 94 files · ~59,324 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1080 nodes · 1701 edges · 71 communities (52 shown, 19 thin omitted)
+- 1095 nodes · 1716 edges · 69 communities (51 shown, 18 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 30 edges (avg confidence: 0.88)
 - Token cost: 0 input · 0 output
 
@@ -15,11 +15,11 @@
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
-- prover.worker.ts
+- security_scan.py
 - generate_test_vectors.py
 - compilerOptions
 - train_model.py
-- test_ai_engine.py
+- audit_event
 - package.json
 - Compact Language Skill
 - ZK-Appraise: AI Lead (Person 1) Multi-Phase Execution Plan
@@ -37,14 +37,14 @@
 - App.tsx
 - midnight-environment-setup/SKILL.md
 - runtime_utils.py
-- useMidnightContract.ts
+- run_health_check
 - export_abi.py
 - Midnight Network ZK Loan Application
 - TestDataLoading
-- LoanCalculator.tsx
-- ZK-Appraise: Zero-Knowledge Machine Learning Home Equity Appraisal & Lending Protocol
+- write_monitoring_snapshot
+- ZK-Appraise (VeilCred)
 - compilerOptions
-- load_data
+- test_ai_engine.py
 - verify_standalone.py
 - .alignment
 - model_gen.py
@@ -53,12 +53,10 @@
 - metrics_utils.py
 - mergingplan.md
 - RealEstateAppraisalDataset
-- logging_utils.py
+- parse_args
 - index.ts
-- midnightWallet.ts
 - Test Phase II - Security Penetration & Performance Benchmark Report
 - prover_daemon.py
-- ProofService
 - Test Phase I - Numerical Fidelity & Resource Profiling Report
 - build_vectors
 - _AppraisalReport_0
@@ -71,7 +69,7 @@
 - _MerkleTreePathEntry_0
 - _tuple_0
 - ZK-Appraise Frontend
-- MidnightContractBridge
+- contractService.ts
 - test_full_pipeline
 - implementationplann.md
 - vite-env.d.ts
@@ -107,27 +105,27 @@
 ## Import Cycles
 - None detected.
 
-## Communities (71 total, 19 thin omitted)
+## Communities (69 total, 18 thin omitted)
 
-### Community 0 - "prover.worker.ts"
-Cohesion: 0.16
-Nodes (13): PropertyIntakeFormProps, getCachedCircuitAsset(), openAssetDatabase(), setCachedCircuitAsset(), PropertyInputs, ProverGenerateMessage, ProverInitMessage, ProverProgress (+5 more)
+### Community 0 - "security_scan.py"
+Cohesion: 0.33
+Nodes (8): main(), Path, Local dependency and source secret scanning entry point., Execute pip-audit against pinned dependencies., Execute detect-secrets and fail if any secrets are discovered., Run pip-audit and detect-secrets against the source tree., run_detect_secrets(), run_pip_audit()
 
 ### Community 1 - "generate_test_vectors.py"
-Cohesion: 0.09
-Nodes (45): CLIOptions, parse_args(), Shared CLI parsing with safe path, timeout, retry, and logging controls., Validated command-line options., Parse and validate common CLI options. Parameters: description: Command…, ArtifactValidationError, Custom exception hierarchy for actionable pipeline failures., Raised when generated artifacts violate the cross-team contract. (+37 more)
+Cohesion: 0.11
+Nodes (35): ArtifactValidationError, Raised when generated artifacts violate the cross-team contract., main(), Generate deterministic ONNX-backed vectors for all California Housing rows., Generate the complete vector artifact with lock, audit, and atomic persistence., artifact_lock(), atomic_write_bytes(), atomic_write_json() (+27 more)
 
 ### Community 2 - "compilerOptions"
 Cohesion: 0.06
 Nodes (34): compilerOptions, allowImportingTsExtensions, allowJs, baseUrl, esModuleInterop, isolatedModules, jsx, lib (+26 more)
 
 ### Community 3 - "train_model.py"
-Cohesion: 0.11
-Nodes (35): ModelError, Raised when training, model export, or model inference fails., check_shutdown(), Raise if graceful shutdown has been requested., atomic_write_bytes(), create_artifact_backup_snapshot(), Atomically write binary content and optionally back up the previous artifact., Create a synchronized backup snapshot of all artifacts before pipeline… (+27 more)
+Cohesion: 0.12
+Nodes (31): ModelError, Raised when training, model export, or model inference fails., install_signal_handlers(), Install SIGINT/SIGTERM handlers that request graceful shutdown., create_artifact_backup_snapshot(), Create a synchronized backup snapshot of all artifacts before pipeline…, Bad metrics must never pass the model quality gate., test_quality_gate_rejects_bad_model() (+23 more)
 
-### Community 4 - "test_ai_engine.py"
-Cohesion: 0.06
-Nodes (39): audit_event(), Any, Path, Append-only audit events for pipeline operations., Append a redacted audit event to the local audit trail., Path, Return health status without modifying model artifacts. Parameters: directory:…, run_health_check() (+31 more)
+### Community 4 - "audit_event"
+Cohesion: 0.11
+Nodes (19): audit_event(), Any, Path, Append-only audit events for pipeline operations., Append a redacted audit event to the local audit trail., Path, Restore ``.bak`` files for artifacts after a failed deployment. Parameters:…, restore_artifact_backups() (+11 more)
 
 ### Community 5 - "package.json"
 Cohesion: 0.06
@@ -154,8 +152,8 @@ Cohesion: 0.07
 Nodes (26): 1) The Fundamental Visibility Rule, 2) Privacy Audit Checklist, 3) What Leaks Even With Witnesses, 4) Data Leak Patterns (The Common Mistakes), 5) Defensive Patterns (Full Implementations), 6) Transaction Semantics — Security Implications, 7) What ZK Proofs Do and Do Not Guarantee, 8) Merkle Tree Depth Selection (+18 more)
 
 ### Community 12 - "model_config.py"
-Cohesion: 0.12
-Nodes (25): ConfigurationError, Raised when canonical configuration is internally inconsistent., artifact_dir(), _env(), env_float(), env_int(), log_level(), Path (+17 more)
+Cohesion: 0.15
+Nodes (21): ConfigurationError, Raised when canonical configuration is internally inconsistent., artifact_dir(), _env(), env_float(), env_int(), log_level(), Path (+13 more)
 
 ### Community 13 - "zk-appraise AI Engine — Production-Hardened"
 Cohesion: 0.08
@@ -182,20 +180,20 @@ Cohesion: 0.05
 Nodes (41): autoprefixer, class-variance-authority, clsx, dependencies, class-variance-authority, clsx, lucide-react, react (+33 more)
 
 ### Community 19 - "App.tsx"
-Cohesion: 0.16
-Nodes (10): App(), GradientMesh(), Hero(), stats, PropertyIntakeForm(), SiteNav(), SiteNavProps, WalletConnector() (+2 more)
+Cohesion: 0.05
+Nodes (37): App(), GradientMesh(), Hero(), stats, currency(), LoanCalculator(), LoanCalculatorProps, PropertyIntakeForm() (+29 more)
 
 ### Community 20 - "midnight-environment-setup/SKILL.md"
 Cohesion: 0.11
 Nodes (17): Agent Behavior, compact: command not found, Docker not running, Final Verification Checklist, Goal, Port 6300 already in use, Responsibilities, Skill: Midnight Environment Setup (+9 more)
 
 ### Community 21 - "runtime_utils.py"
-Cohesion: 0.13
-Nodes (17): AIEngineError, Base exception for all expected AI-engine failures., check_resources(), deadline(), install_signal_handlers(), process_identity(), Path, Runtime safety controls: graceful shutdown, deadlines, and resource checks. (+9 more)
+Cohesion: 0.14
+Nodes (17): AIEngineError, Base exception for all expected AI-engine failures., check_resources(), check_shutdown(), deadline(), process_identity(), Path, Runtime safety controls: graceful shutdown, deadlines, and resource checks. (+9 more)
 
-### Community 22 - "useMidnightContract.ts"
-Cohesion: 0.33
-Nodes (8): UseMidnightContractReturn, WorkflowState, ContractVerificationResult, globalMidnightContractBridge, LoanStatus, TierConfig, VerificationRequest, CompactProofPayload
+### Community 22 - "run_health_check"
+Cohesion: 0.29
+Nodes (7): Path, Return health status without modifying model artifacts. Parameters: directory:…, run_health_check(), Health check fails if required artifacts are absent., Health check succeeds on root artifact workspace., test_health_check_detects_missing_files(), test_health_check_passes_on_valid_artifacts()
 
 ### Community 23 - "export_abi.py"
 Cohesion: 0.18
@@ -209,21 +207,21 @@ Nodes (16): 10) Security checklist, 11) Production notes, 1) Monorepo Structure,
 Cohesion: 0.17
 Nodes (12): Any, ndarray, Recover from transient loader failures within the configured retry budget., Unit tests for deterministic dataset validation., Build a lightweight sklearn-like dataset fixture., Verify that only indices [0,1,2,5] are selected in canonical order., Reject NaN feature values with a contextual validation error., Reject NaN target values. (+4 more)
 
-### Community 26 - "LoanCalculator.tsx"
-Cohesion: 0.38
-Nodes (5): currency(), LoanCalculator(), LoanCalculatorProps, AppraisalTier, TIER_DEFINITIONS
+### Community 26 - "write_monitoring_snapshot"
+Cohesion: 0.40
+Nodes (4): Path, Lightweight local monitoring snapshot for dashboards and CI., Persist a monitoring snapshot containing process/resource metrics., write_monitoring_snapshot()
 
-### Community 27 - "ZK-Appraise: Zero-Knowledge Machine Learning Home Equity Appraisal & Lending Protocol"
-Cohesion: 0.12
-Nodes (16): 1. Prerequisites, 2. Root & Contract Setup, 3. AI Engine & Circuit Pipeline, 4. Running the Frontend DApp, Frontend Build & Typecheck, 🌟 Key Features, 📄 License, 📑 Pitch, Architecture & Documentation Index (+8 more)
+### Community 27 - "ZK-Appraise (VeilCred)"
+Cohesion: 0.06
+Nodes (31): 10. Documentation Index, 11. License & Team, 1. Executive Summary & Problem Statement, 2. System Architecture & Protocol Flow, 3.1 AI Valuation Engine (`ai-engine/`), 3.2 ZKML Circuit Pipeline & EZKL Prover (`zk-circuits/`), 3.3 Midnight Compact Smart Contracts (`contracts/`), 3.4 Client Web Application & Prover (`frontend/`) (+23 more)
 
 ### Community 28 - "compilerOptions"
 Cohesion: 0.12
 Nodes (16): compilerOptions, declaration, declarationMap, exactOptionalPropertyTypes, isolatedModules, jsx, module, moduleDetection (+8 more)
 
-### Community 29 - "load_data"
-Cohesion: 0.21
-Nodes (15): dataset_fingerprint(), load_data(), load_raw_dataset(), Any, ndarray, California Housing loading, feature extraction, validation, and lineage., Return a reproducible SHA-256 fingerprint for dataset lineage., Validate the immutable feature and tensor contract. (+7 more)
+### Community 29 - "test_ai_engine.py"
+Cohesion: 0.10
+Nodes (27): dataset_fingerprint(), load_data(), load_raw_dataset(), Any, ndarray, California Housing loading, feature extraction, validation, and lineage., Return a reproducible SHA-256 fingerprint for dataset lineage., Validate the immutable feature and tensor contract. (+19 more)
 
 ### Community 30 - "verify_standalone.py"
 Cohesion: 0.22
@@ -253,17 +251,13 @@ Nodes (11): 1. Compile ML model and generate ZK-circuits artifacts, 2. Run fidel
 Cohesion: 0.27
 Nodes (5): get_dataloaders(), Real Estate Appraisal Dataset with synthetic feature generation and…, RealEstateAppraisalDataset, train_and_export(), Dataset
 
-### Community 39 - "logging_utils.py"
+### Community 39 - "parse_args"
 Cohesion: 0.09
-Nodes (26): main(), Path, CI/CD deployment gate with timeouts, security scans, tests, and rollback-safe…, Run a deployment command with a hard subprocess timeout., Run security, static analysis, tests, and artifact validation gates., run_gate(), JsonFormatter, log_metric() (+18 more)
+Nodes (33): CLIOptions, parse_args(), Shared CLI parsing with safe path, timeout, retry, and logging controls., Validated command-line options., Parse and validate common CLI options. Parameters: description: Command…, main(), Path, CI/CD deployment gate with timeouts, security scans, tests, and rollback-safe… (+25 more)
 
 ### Community 40 - "index.ts"
-Cohesion: 0.10
-Nodes (30): ArtifactUnavailableError, ProofValidationError, ProverExecutionError, ProverUnavailableError, SimulationDisabledError, VersionMismatchError, DaemonProveResponse, DaemonStatusResponse (+22 more)
-
-### Community 41 - "midnightWallet.ts"
-Cohesion: 0.29
-Nodes (3): MidnightTxResult, MidnightWalletService, SubmitCollateralTxParams
+Cohesion: 0.09
+Nodes (34): ArtifactUnavailableError, ProofValidationError, ProverExecutionError, ProverUnavailableError, SimulationDisabledError, VersionMismatchError, DaemonProveResponse, DaemonStatusResponse (+26 more)
 
 ### Community 42 - "Test Phase II - Security Penetration & Performance Benchmark Report"
 Cohesion: 0.33
@@ -290,24 +284,24 @@ Cohesion: 0.67
 Nodes (3): Run training, vector generation, and strict artifact verification end-to-end., test_full_pipeline(), integration
 
 ## Knowledge Gaps
-- **394 isolated node(s):** `LoanStatus`, `AppraisalTier`, `LoanOutcome`, `LoanKey`, `AppraisalReport` (+389 more)
+- **405 isolated node(s):** `LoanStatus`, `AppraisalTier`, `LoanOutcome`, `LoanKey`, `AppraisalReport` (+400 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **19 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **18 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `MidnightContractBridge` connect `MidnightContractBridge` to `App.tsx`, `useMidnightContract.ts`?**
-  _High betweenness centrality (0.032) - this node is a cross-community bridge._
-- **Why does `Contract` connect `Contract` to `index.js`, `MidnightContractBridge`, `.alignment`?**
+- **Why does `Contract` connect `Contract` to `index.js`, `contractService.ts`, `.alignment`?**
   _High betweenness centrality (0.009) - this node is a cross-community bridge._
-- **Why does `load_data()` connect `load_data` to `generate_test_vectors.py`, `train_model.py`, `test_ai_engine.py`, `TestDataLoading`?**
+- **Why does `load_data()` connect `test_ai_engine.py` to `generate_test_vectors.py`, `train_model.py`, `TestDataLoading`?**
   _High betweenness centrality (0.008) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `ModelError` (e.g. with `test_onnx_input_rejects_nan()` and `test_quality_gate_rejects_bad_model()`) actually correct?**
   _`ModelError` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `LoanStatus`, `AppraisalTier`, `LoanOutcome` to the rest of the system?**
-  _394 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _405 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `generate_test_vectors.py` be split into smaller, more focused modules?**
-  _Cohesion score 0.09049773755656108 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.10668563300142248 - nodes in this community are weakly interconnected._
 - **Should `compilerOptions` be split into smaller, more focused modules?**
   _Cohesion score 0.058823529411764705 - nodes in this community are weakly interconnected._
+- **Should `train_model.py` be split into smaller, more focused modules?**
+  _Cohesion score 0.12096774193548387 - nodes in this community are weakly interconnected._
