@@ -19,10 +19,13 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Verra Protocol — Zero-Knowledge Real Estate Appraisal',
+  title: 'VeilCred — Zero-Knowledge Real Estate Appraisal',
   description:
-    'Generate verifiable, privacy-preserving property appraisals on-chain. Instant LTV collateral proofs powered by zero-knowledge cryptography.',
-  generator: 'v0.app',
+    'Generate verifiable, privacy-preserving property appraisals on-chain. Powered by zero-knowledge cryptography.',
+  icons: {
+    icon: '/icon.svg',
+    apple: '/icon.svg',
+  },
 }
 
 export const viewport: Viewport = {
