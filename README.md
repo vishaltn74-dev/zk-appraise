@@ -9,6 +9,19 @@
 
 ---
 
+## 📑 Pitch, Architecture & Documentation Index
+
+Comprehensive technical documentation and pitch blueprints are structured across the repository:
+
+- **Architecture & System Blueprint**: [docs-pitch/PLAN.md](file:///c:/Users/KIIT/zk-appraise/docs-pitch/PLAN.md) — End-to-end technical specification, trust model, and proving pipeline.
+- **Multi-Agent Execution Roles**: [docs-pitch/AGENTS.md](file:///c:/Users/KIIT/zk-appraise/docs-pitch/AGENTS.md) — Separation of responsibilities across AI, Cryptography, Smart Contracts, and Frontend leads.
+- **Contract Technical Specification**: [contracts/ZK_APPRAISAL_VERIFIER_SPEC.md](file:///c:/Users/KIIT/zk-appraise/contracts/ZK_APPRAISAL_VERIFIER_SPEC.md) — Ledger state schema, Jubjub Schnorr attestation, and privacy boundaries.
+- **Circuit Manifest & Verification ABI**: [zk-circuits/CIRCUIT_MANIFEST.md](file:///c:/Users/KIIT/zk-appraise/zk-circuits/CIRCUIT_MANIFEST.md) — Halo2/KZG parameterization, scale factors, and verifier ABI layout.
+- **Phase 1 Benchmark Report**: [reports/test_phase1_report.md](file:///c:/Users/KIIT/zk-appraise/reports/test_phase1_report.md) — Numerical fidelity (MAPE $\le 0.5\%$), RAM profiling, and latency benchmarks.
+- **Phase 2 Security Audit Report**: [reports/test_phase2_security_report.md](file:///c:/Users/KIIT/zk-appraise/reports/test_phase2_security_report.md) — Resistance against witness forgery, scalar tampering, and replay attacks.
+
+---
+
 ## 🌟 Key Features
 
 - **Zero-Telemetry Local AI Valuation**: Properties are evaluated locally using a deterministic linear regression model trained on standardized housing attributes.
@@ -19,7 +32,7 @@
 
 ---
 
-## 🏗️ System Architecture
+## 🏗️ System Architecture & Data Flow
 
 ```
 ┌─────────────────────────┐       ┌───────────────────────────┐
@@ -104,6 +117,7 @@ zk-appraise/
 │   │   │   └── midnightWallet.ts     # DApp contract invocation & transaction dispatcher
 │   │   └── workers/
 │   │       └── prover.worker.ts      # Dedicated Wasm worker for local proof generation
+│   ├── components/                   # Interactive appraisal landing page & UI widgets
 │   └── package.json
 │
 ├── src/
@@ -118,7 +132,11 @@ zk-appraise/
 │   └── e2e/
 │       └── test_full_pipeline.py     # End-to-end Python -> EZKL -> Compact flow
 │
-├── docs-pitch/                       # Architecture diagrams & pitch materials
+├── docs-pitch/                       # Architecture diagrams, pitch deck & planning docs
+│   ├── PLAN.md                       # Comprehensive architectural blueprint
+│   ├── AGENTS.md                     # Monorepo multi-agent team roles
+│   └── implementationplann.md        # Cryptography & ZKML engineering spec
+│
 ├── reports/                          # Audit & benchmark reports
 ├── pyproject.toml                    # Root Python dependencies & build config
 ├── tsconfig.json                     # TypeScript compiler configuration
@@ -157,7 +175,7 @@ zk-appraise/
 git clone https://github.com/vishaltn74-dev/zk-appraise.git
 cd zk-appraise
 
-# Install root dependencies (Midnight.js, TypeScript, etc.)
+# Install root dependencies (Midnight.js, TypeScript, Vitest)
 npm install
 ```
 
@@ -214,7 +232,7 @@ pytest tests/e2e/test_full_pipeline.py
 
 ```bash
 # Run Compact contract tests
-npx ts-node contracts/tests/collateral_pool.test.ts
+npm test
 ```
 
 ### Frontend Build & Typecheck

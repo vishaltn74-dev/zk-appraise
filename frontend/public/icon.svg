@@ -1,0 +1,14 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+	<defs>
+		<image  width="32" height="32" id="img1" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgAQMAAABJtOi3AAAAAXNSR0IB2cksfwAAAANQTFRF////p8QbyAAAAA9JREFUeJxjZAACxsFLAAAK8AAhCVrP+AAAAABJRU5ErkJggg=="/>
+	</defs>
+	<style>
+		tspan { white-space:pre } 
+		.t0 { font-size: 24px;fill: #000000;font-weight: 400;font-family: "Cubic", "Cubic" } 
+	</style>
+	<use id="Background" href="#img1" x="0" y="0"/>
+	<text id="VC" style="transform: matrix(.916,0,0,.916,.703,21.116)">
+		<tspan x="0" y="0" class="t0" dx="0" >V</tspan><tspan  y="0" class="t0" dx="0 -5" >C
+</tspan>
+	</text>
+</svg>

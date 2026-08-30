@@ -1,0 +1,10 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 50" width="200" height="50">
+	<style>
+		tspan { white-space:pre } 
+		.t0 { font-size: 22px;fill: #000000;font-weight: 400;font-family: "Anton-Regular", "Anton" } 
+	</style>
+	<text id="VeilCred" style="transform: matrix(2.386,0,0,2.386,24,48.947)">
+		<tspan x="0" y="0" class="t0" dx="0" >V</tspan><tspan  y="0" class="t0" dx="0" >e</tspan><tspan  y="0" class="t0" dx="0" >i</tspan><tspan  y="0" class="t0" dx="0" >l</tspan><tspan  y="0" class="t0" dx="0" >C</tspan><tspan  y="0" class="t0" dx="0" >r</tspan><tspan  y="0" class="t0" dx="0" >e</tspan><tspan  y="0" class="t0" dx="0 -1" >d
+</tspan>
+	</text>
+</svg>

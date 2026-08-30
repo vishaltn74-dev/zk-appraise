@@ -1,0 +1,10 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" width="180" height="180">
+	<defs>
+		<image  width="180" height="180" id="img1" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0AQMAAAAHA5RxAAAAAXNSR0IB2cksfwAAAANQTFRF////p8QbyAAAACZJREFUeJztyDENAAAMA6DVv+kZqIEmcJLr4r333nvvvffeez/yDwhqALVdI8eZAAAAAElFTkSuQmCC"/>
+		<image width="32" height="32" id="img2" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAATJQTFRF////5+fnVVVVQkJC39/f8vLygYGBDg4OAAAABgYGdHR07e3t/f39k5OTEBAQCAgIFRUV+fn57Ozsm5ub9PT0/v7+oqKi0dHRNDQ0YWFh5ubmdnZ2AgICJCQkwcHBsLCwDw8PKCgovLy819fXPT09AQEBISEhsrKyxcXFLi4uY2NjRERE3t7eXV1dl5eX+vr6pKSkJiYmjo6O1tbWj4+PtLS0h4eHDQ0NoKCgx8fHCgoKAwMDoaGhYmJi/Pz8pqamCwsLfn5+9/f3rq6uR0dH1dXVzc3NEhISnp6ecXFxHx8fuLi4MzMzBAQEDAwM+Pj4cHBwExMT0NDQQ0NDSkpK4ODg9fX1goKCLy8vvb29r6+vw8PDOTk59vb28fHx6+vrnJyc6Ojo6urqX19fQEBA4uLi7vpjTQAAAUxJREFUeJzdks1LQlEQxc+B6hlKoPCKUAxs0yKiRdInhYaB2CLaBi36t1pEtJWgRRSZbSqoyEqsIAzDDBSTdCOK9DW+l/Zpb12zuZyZH/fOzLmEQfAfA5R4bAw0S7nKFH8GLGQFCstQSua8BtjI3FtR5X07C4CVFUWSKm8F6GKmkwmt3s07OlJw8kpED28A1yVhqhbONcBmjwMmJ6P6dXbpI0J5rve43oA7hr6jL2MORvsP6nL49DswcmIAtL4YAm3ZXwFHzuCG0cjA3kfAvVsT44w9oLqHIXJHT00m0sAYQ5qYiqcnuEn4r1PwXiQlE+A2fNwCPC1rMPueQvDvZ8WLWa4D08SzHF5TEw8zmCFLG1AshaLu5hyDUMqyVIt3BZgP6+a5Xcuo2a0GVsVij3VJb8XXEdScBN7/w4IYs1gfRg0kz/L4BDSMPwG8AutvXiHcCJX+AAAAAElFTkSuQmCC"/>
+	</defs>
+	<style>
+	</style>
+	<use id="Background" href="#img1" x="0" y="0"/>
+	<use id="icon-dark-32x32" href="#img2" transform="matrix(5.25,0,0,5.25,6,6)"/>
+</svg>
