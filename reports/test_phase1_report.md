@@ -10,8 +10,8 @@
 | Metric | Target SLA | Measured Value | SLA Compliance |
 |---|---|---|---|
 | Numerical Fidelity (MAPE) | $\le 0.5\%$ | $0.000728\%$ | PASSED |
-| Prover Generation Runtime | $\le 8.0\text{ s}$ | 0.158 s | PASSED |
-| Prover Memory Footprint | $\le 2.0\text{ GB}$ | 0.245 GB | PASSED |
+| Prover Generation Runtime | $\le 8.0\text{ s}$ | 0.156 s | PASSED |
+| Prover Memory Footprint | $\le 2.0\text{ GB}$ | 0.246 GB | PASSED |
 
 ## Soundness & Security Checks
 - **Boundary Vector Coverage**: Minimum bounds, Maximum bounds, Outlier clamping verified.

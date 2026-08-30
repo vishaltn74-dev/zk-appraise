@@ -1,104 +1,58 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { PropertyIntakeForm } from './components/PropertyIntakeForm';
 import { LoanCalculator } from './components/LoanCalculator';
 import { WalletConnector } from './components/WalletConnector';
-import { ProofService, CompactProofPayload } from './services/proofService';
-import { MidnightWalletService, MidnightTxResult } from './services/midnightWallet';
-import { PropertyInputs, ProverProgress, ProverWorkerOutput } from './workers/prover.worker';
+import { useMidnightContract } from './hooks/useMidnightContract';
+import { PropertyInputs } from './workers/prover.worker';
 
 export const App: React.FC = () => {
-  const [walletAddress, setWalletAddress] = useState<string | null>(null);
-  const [isProving, setIsProving] = useState<boolean>(false);
-  const [provingProgress, setProvingProgress] = useState<ProverProgress | null>(null);
-  const [proofResult, setProofResult] = useState<ProverWorkerOutput | null>(null);
-  const [compactPayload, setCompactPayload] = useState<CompactProofPayload | null>(null);
-  const [requestedLoanUsd, setRequestedLoanUsd] = useState<number>(350000);
-  const [isSubmittingTx, setIsSubmittingTx] = useState<boolean>(false);
-  const [txResult, setTxResult] = useState<MidnightTxResult | null>(null);
-  const [statusMessage, setStatusMessage] = useState<string | null>(null);
+  const {
+    workflowState,
+    stageMessage,
+    proverProgress,
+    proofOutput,
+    verificationResult,
+    error,
+    walletAddress,
+    isSimulated,
+    connectWallet,
+    disconnectWallet,
+    executeAppraisal,
+  } = useMidnightContract();
 
-  const proofServiceRef = useRef<ProofService | null>(null);
-  const midnightWalletRef = useRef<MidnightWalletService | null>(null);
+  const [requestedLoanUsd, setRequestedLoanUsd] = useState<number>(300000);
+  const [secretPin, setSecretPin] = useState<number>(4321);
+  const [cachedInputs, setCachedInputs] = useState<PropertyInputs>({
+    medInc: 3.5,
+    houseAge: 20,
+    aveRooms: 5.5,
+    aveOccup: 3.0,
+    sqft: 2200,
+    bedrooms: 3,
+    bathrooms: 2,
+    age: 20,
+    locationRisk: 25,
+  });
 
-  useEffect(() => {
-    proofServiceRef.current = new ProofService();
-    midnightWalletRef.current = new MidnightWalletService();
-
-    // Preload & warm cache
-    proofServiceRef.current.preloadAssets().catch(console.warn);
-
-    return () => {
-      proofServiceRef.current?.terminate();
-    };
-  }, []);
-
-  const handleWalletConnect = (address: string) => {
-    setWalletAddress(address);
-    midnightWalletRef.current?.setWalletAddress(address);
-    setStatusMessage('Midnight Lace Wallet connected.');
+  const handleSynthesizeAndSubmit = async (inputs: PropertyInputs) => {
+    setCachedInputs(inputs);
+    await executeAppraisal(inputs, requestedLoanUsd, secretPin);
   };
 
-  const handleWalletDisconnect = () => {
-    setWalletAddress(null);
-    midnightWalletRef.current?.setWalletAddress(null);
-    setStatusMessage('Wallet disconnected.');
+  const handleLoanSubmitOnly = async () => {
+    await executeAppraisal(cachedInputs, requestedLoanUsd, secretPin);
   };
 
-  const handleSynthesizeProof = async (inputs: PropertyInputs) => {
-    if (!proofServiceRef.current) return;
-
-    setIsProving(true);
-    setTxResult(null);
-    setStatusMessage('Synthesizing Zero-Knowledge Real Estate Valuation Proof...');
-
-    try {
-      const output = await proofServiceRef.current.generateProof(inputs, (progress) => {
-        setProvingProgress(progress);
-      });
-
-      setProofResult(output);
-
-      // Marshal for Midnight Compact contract with required collateral threshold ($300k base)
-      const marshaled = proofServiceRef.current.marshalForMidnight(output, 300000);
-      setCompactPayload(marshaled);
-      setStatusMessage(`Proof generated in ${(output.executionTimeMs || 0).toFixed(0)} ms! Ready for Midnight submission.`);
-    } catch (err: any) {
-      console.error('Prover error:', err);
-      setStatusMessage(`Proof generation failed: ${err?.message || 'Unknown error'}`);
-    } finally {
-      setIsProving(false);
-    }
+  const stateBadges: Record<string, { label: string; color: string; ping: string }> = {
+    idle: { label: 'Ready', color: 'text-slate-400 bg-slate-900 border-slate-700', ping: 'bg-slate-500' },
+    generating_proof: { label: 'Generating ZKML Proof', color: 'text-cyan-400 bg-cyan-950/80 border-cyan-800', ping: 'bg-cyan-400' },
+    submitting_to_midnight: { label: 'Submitting to Midnight', color: 'text-amber-400 bg-amber-950/80 border-amber-800', ping: 'bg-amber-400' },
+    verified: { label: 'Contract Verified', color: 'text-emerald-400 bg-emerald-950/80 border-emerald-800', ping: 'bg-emerald-400' },
+    rejected: { label: 'Contract Rejected', color: 'text-rose-400 bg-rose-950/80 border-rose-800', ping: 'bg-rose-400' },
+    error: { label: 'Error', color: 'text-rose-400 bg-rose-950/80 border-rose-800', ping: 'bg-rose-400' },
   };
 
-  const handleSubmitLoan = async () => {
-    if (!midnightWalletRef.current || !walletAddress) {
-      alert('Please connect your Midnight Lace Wallet first.');
-      return;
-    }
-    if (!compactPayload || !proofResult?.valuationUsd) {
-      alert('Please synthesize a zero-knowledge appraisal proof first.');
-      return;
-    }
-
-    setIsSubmittingTx(true);
-    setStatusMessage('Submitting ZK proof and collateral commitment to Midnight Network...');
-
-    try {
-      const result = await midnightWalletRef.current.submitCollateralProofTx({
-        ...compactPayload,
-        requestedLoanUsd,
-        valuationUsd: proofResult.valuationUsd,
-      });
-
-      setTxResult(result);
-      setStatusMessage('Transaction confirmed on Midnight! Collateral successfully registered.');
-    } catch (err: any) {
-      console.error('Submission failed:', err);
-      setStatusMessage(`Submission failed: ${err?.message || 'Unknown error'}`);
-    } finally {
-      setIsSubmittingTx(false);
-    }
-  };
+  const currentBadge = stateBadges[workflowState] || stateBadges.idle;
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between">
@@ -114,9 +68,12 @@ export const App: React.FC = () => {
               <p className="text-[11px] text-slate-400">Zero-Knowledge DeFi Home Equity on Midnight Network</p>
             </div>
           </div>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-3">
             <span className="hidden sm:inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-cyan-950/80 text-cyan-400 border border-cyan-800 font-mono">
               Halo2 / EZKL Wasm Engine
+            </span>
+            <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-purple-950/80 text-purple-300 border border-purple-800 font-mono">
+              Compact 0.26
             </span>
           </div>
         </div>
@@ -128,83 +85,131 @@ export const App: React.FC = () => {
         <WalletConnector
           isConnected={!!walletAddress}
           walletAddress={walletAddress}
-          onConnect={handleWalletConnect}
-          onDisconnect={handleWalletDisconnect}
+          onConnect={connectWallet}
+          onDisconnect={disconnectWallet}
         />
 
-        {/* Status Alert Bar */}
-        {statusMessage && (
-          <div className="mb-6 p-3 rounded-lg bg-slate-900 border border-slate-800 text-xs font-mono text-cyan-300 flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <span className="inline-block w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
-              <span>{statusMessage}</span>
-            </div>
-            {proofResult?.executionTimeMs && (
-              <span className="text-slate-400">Latency: {proofResult.executionTimeMs.toFixed(0)} ms</span>
+        {/* Reactive Status Bar */}
+        <div className="mb-6 p-3 rounded-lg bg-slate-900 border border-slate-800 text-xs font-mono flex items-center justify-between shadow-lg">
+          <div className="flex items-center space-x-2.5">
+            <span className={`inline-block w-2.5 h-2.5 rounded-full ${currentBadge.ping} ${workflowState === 'generating_proof' || workflowState === 'submitting_to_midnight' ? 'animate-ping' : ''}`} />
+            <span className={`px-2 py-0.5 rounded text-[11px] font-bold border ${currentBadge.color}`}>
+              {currentBadge.label}
+            </span>
+            <span className="text-slate-300 truncate max-w-xl">{stageMessage}</span>
+          </div>
+          <div className="flex items-center space-x-3 text-slate-400 text-[11px]">
+            {proofOutput?.executionTimeMs && (
+              <span>Prover: {proofOutput.executionTimeMs.toFixed(0)} ms</span>
             )}
+            <span className={`px-2 py-0.5 rounded font-mono ${isSimulated ? 'bg-slate-800 text-slate-400' : 'bg-emerald-950 text-emerald-300'}`}>
+              {isSimulated ? 'Local Simulator' : 'Midnight Live'}
+            </span>
+          </div>
+        </div>
+
+        {error && (
+          <div className="mb-6 p-4 rounded-lg bg-rose-950/60 border border-rose-800 text-xs text-rose-300 font-mono flex items-center justify-between">
+            <span>✕ {error}</span>
           </div>
         )}
 
         {/* 2-Column Application Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Left Column: Private Property Intake Form */}
+          {/* Left Column: Property Intake Form */}
           <div>
             <PropertyIntakeForm
-              onSubmit={handleSynthesizeProof}
-              isLoading={isProving}
-              progress={provingProgress}
+              onSubmit={handleSynthesizeAndSubmit}
+              isLoading={workflowState === 'generating_proof' || workflowState === 'submitting_to_midnight'}
+              progress={proverProgress}
             />
 
-            {/* Proof Details Card */}
-            {proofResult && (
+            {/* Proof Artifact Details Card */}
+            {proofOutput && (
               <div className="mt-6 bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-xl text-xs space-y-3">
                 <div className="flex justify-between items-center border-b border-slate-800 pb-2">
                   <span className="font-bold text-white uppercase tracking-wider">ZK Proof Artifact (π)</span>
-                  <span className="text-emerald-400 font-mono">512 Bytes Valid</span>
+                  <span className="text-emerald-400 font-mono">512 Bytes Halo2 SNARK Valid</span>
                 </div>
                 <div className="bg-slate-950 p-3 rounded border border-slate-800 font-mono text-[11px] text-slate-400 break-all">
-                  {proofResult.proof?.slice(0, 120)}...
+                  {proofOutput.proof?.slice(0, 140)}...
                 </div>
                 <div className="grid grid-cols-2 gap-2 text-slate-400">
-                  <div>Quantized Scalar: <span className="text-slate-200 font-mono">{proofResult.quantizedValuationScalar}</span></div>
-                  <div>Scale Multiplier: <span className="text-slate-200 font-mono">{proofResult.scaleFactor} (2^{proofResult.scalePower})</span></div>
+                  <div>Quantized Scalar: <span className="text-slate-200 font-mono">{proofOutput.quantizedValuationScalar}</span></div>
+                  <div>Scale Multiplier: <span className="text-slate-200 font-mono">{proofOutput.scaleFactor} (2^{proofOutput.scalePower})</span></div>
                 </div>
               </div>
             )}
           </div>
 
-          {/* Right Column: Loan Calculator & Midnight Submitter */}
+          {/* Right Column: Loan Calculator & Midnight Smart Contract Outcomes */}
           <div className="space-y-6">
             <LoanCalculator
-              appraisalValuationUsd={proofResult?.valuationUsd || null}
+              appraisalValuationUsd={proofOutput?.valuationUsd || null}
               requestedLoanUsd={requestedLoanUsd}
               onRequestedLoanChange={setRequestedLoanUsd}
-              onSubmitLoanRequest={handleSubmitLoan}
-              isSubmitting={isSubmittingTx}
-              vkCommitment={proofResult?.vkCommitment}
-              scaleFactor={proofResult?.scaleFactor}
+              secretPin={secretPin}
+              onSecretPinChange={setSecretPin}
+              onSubmitLoanRequest={handleLoanSubmitOnly}
+              isSubmitting={workflowState === 'submitting_to_midnight' || workflowState === 'generating_proof'}
+              vkCommitment={proofOutput?.vkCommitment}
+              scaleFactor={proofOutput?.scaleFactor}
+              workflowState={workflowState}
+              tier={verificationResult?.tier}
             />
 
-            {/* Confirmed Transaction Receipt */}
-            {txResult && (
-              <div className="bg-emerald-950/30 border border-emerald-800 rounded-xl p-5 shadow-2xl space-y-3">
-                <div className="flex items-center space-x-2 text-emerald-400 font-bold">
-                  <div className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
-                  <span>Midnight Contract Receipt Confirmed</span>
+            {/* Confirmed Contract Outcome Receipt */}
+            {verificationResult && (
+              <div className={`border rounded-xl p-5 shadow-2xl space-y-4 ${
+                verificationResult.status === 'VERIFIED'
+                  ? 'bg-emerald-950/30 border-emerald-800'
+                  : 'bg-rose-950/30 border-rose-800'
+              }`}>
+                <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                  <div className="flex items-center space-x-2">
+                    <div className={`w-3 h-3 rounded-full ${verificationResult.status === 'VERIFIED' ? 'bg-emerald-400' : 'bg-rose-400'}`} />
+                    <span className="font-bold text-sm text-white">
+                      Midnight Smart Contract Outcome: {verificationResult.status}
+                    </span>
+                  </div>
+                  <span className="text-xs font-mono text-cyan-400 font-semibold">
+                    {verificationResult.tierName}
+                  </span>
                 </div>
-                <div className="text-xs space-y-1 text-slate-300">
-                  <div>
+
+                <div className="grid grid-cols-2 gap-3 text-xs">
+                  <div className="bg-slate-950 p-2.5 rounded border border-slate-800">
+                    <span className="text-slate-500 block text-[10px]">Authorized Credit</span>
+                    <span className="text-lg font-bold text-emerald-400">
+                      ${verificationResult.authorizedAmount.toLocaleString()}
+                    </span>
+                  </div>
+                  <div className="bg-slate-950 p-2.5 rounded border border-slate-800">
+                    <span className="text-slate-500 block text-[10px]">Block Height</span>
+                    <span className="text-lg font-bold text-slate-200 font-mono">
+                      #{verificationResult.blockHeight}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="text-xs space-y-1.5 text-slate-300 font-mono bg-slate-950 p-3 rounded border border-slate-800">
+                  <div className="truncate">
                     <span className="text-slate-500">Tx Hash: </span>
-                    <span className="font-mono text-cyan-300">{txResult.transactionHash}</span>
+                    <span className="text-cyan-300">{verificationResult.transactionHash}</span>
                   </div>
-                  <div>
-                    <span className="text-slate-500">Block Height: </span>
-                    <span className="font-mono text-slate-200">#{txResult.blockHeight}</span>
+                  <div className="truncate">
+                    <span className="text-slate-500">Unlinkable PK: </span>
+                    <span className="text-slate-300">{verificationResult.userPublicKey}</span>
                   </div>
-                  <div>
-                    <span className="text-slate-500">Contract: </span>
-                    <span className="font-mono text-slate-200">LoanCollateralPool.compact</span>
+                  <div className="truncate">
+                    <span className="text-slate-500">Nullifier: </span>
+                    <span className="text-slate-400">{verificationResult.nullifierHash}</span>
                   </div>
+                </div>
+
+                <div className="flex items-center justify-between text-[11px] text-slate-400 pt-1">
+                  <span>Contract: <span className="text-slate-200 font-mono">appraiser_verifier.compact</span></span>
+                  <span>Gas Used: <span className="text-slate-200 font-mono">{verificationResult.gasUsed}</span></span>
                 </div>
               </div>
             )}
@@ -214,7 +219,7 @@ export const App: React.FC = () => {
 
       {/* Footer */}
       <footer className="border-t border-slate-800/80 bg-slate-900/40 py-6 text-center text-xs text-slate-500">
-        <p>ZK-Appraise &bull; Powered by Midnight Compact Contracts &bull; Client-Side EZKL Wasm</p>
+        <p>ZK-Appraise &bull; Powered by Midnight Compact Smart Contracts &bull; Client-Side EZKL Wasm Prover</p>
       </footer>
     </div>
   );

@@ -148,14 +148,19 @@ export class ProofService {
         if (onProgress) {
           onProgress({ stage: 'SYNTHESIZING_SNARK', progressPct: 80, message: 'Simulating proof generation...' });
         }
-        const valRaw =
-          inputs.sqft * 0.25 +
-          inputs.bedrooms * 25.0 +
-          inputs.bathrooms * 40.0 -
-          inputs.age * 1.5 -
-          inputs.locationRisk * 2.0 +
-          100.0;
-        const val = Math.max(50000, Math.round(valRaw * 1000));
+        let val: number;
+        if (inputs.medInc !== undefined && inputs.houseAge !== undefined && inputs.aveRooms !== undefined && inputs.aveOccup !== undefined) {
+          const valRaw = 0.4367 * inputs.medInc + 0.0094 * inputs.houseAge - 0.0573 * inputs.aveRooms - 0.0045 * inputs.aveOccup + 0.75;
+          val = Math.max(75000, Math.round(valRaw * 100000));
+        } else {
+          const sqft = inputs.sqft || 2200;
+          const bedrooms = inputs.bedrooms || 3;
+          const bathrooms = inputs.bathrooms || 2;
+          const age = inputs.age || 20;
+          const locationRisk = inputs.locationRisk || 25;
+          const valRaw = sqft * 0.22 + bedrooms * 28.0 + bathrooms * 38.0 - age * 1.8 - locationRisk * 2.2 + 120.0;
+          val = Math.max(50000, Math.round(valRaw * 1000));
+        }
         const scaleFactor = 8192;
         const quantized = (BigInt(val) * BigInt(scaleFactor)).toString();
         const dummyProof = '0x' + 'ab'.repeat(512);
