@@ -26,16 +26,27 @@ export const PropertyIntakeForm: React.FC<PropertyIntakeFormProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState<'property_specs' | 'california_model'>('property_specs');
 
-  // California Housing Model Direct Contract Attributes
-  const [modelData, setModelData] = useState({
+  // California Housing Model Direct Contract Attributes (allows empty string while typing)
+  const [modelData, setModelData] = useState<{
+    medInc: number | string;
+    houseAge: number | string;
+    aveRooms: number | string;
+    aveOccup: number | string;
+  }>({
     medInc: 3.5,     // in $10k units ($35,000)
     houseAge: 15,    // years
     aveRooms: 5.8,   // average rooms
     aveOccup: 2.8,   // average occupancy
   });
 
-  // Intuitive Property Specs
-  const [specsData, setSpecsData] = useState({
+  // Intuitive Property Specs (allows empty string while typing)
+  const [specsData, setSpecsData] = useState<{
+    sqft: number | string;
+    bedrooms: number | string;
+    bathrooms: number | string;
+    age: number | string;
+    locationRisk: number;
+  }>({
     sqft: 2200,
     bedrooms: 4,
     bathrooms: 3,
@@ -46,9 +57,11 @@ export const PropertyIntakeForm: React.FC<PropertyIntakeFormProps> = ({
   // Synchronize from Model to Specs
   const handleModelChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    const val = parseFloat(value) || 0;
-    const nextModel = { ...modelData, [name]: val };
-    setModelData(nextModel);
+    setModelData((prev) => ({ ...prev, [name]: value }));
+
+    if (value === '') return;
+    const val = parseFloat(value);
+    if (isNaN(val)) return;
 
     // Sync specs
     if (name === 'houseAge') {
@@ -71,17 +84,23 @@ export const PropertyIntakeForm: React.FC<PropertyIntakeFormProps> = ({
   };
 
   // Synchronize from Specs to Model
-  const handleSpecsChange = (name: string, val: number) => {
-    const nextSpecs = { ...specsData, [name]: val };
-    setSpecsData(nextSpecs);
+  const handleSpecsChange = (name: string, value: string) => {
+    setSpecsData((prev) => ({ ...prev, [name]: value }));
+
+    if (value === '') return;
+    const val = parseFloat(value);
+    if (isNaN(val)) return;
 
     // Sync model
     if (name === 'age') {
       setModelData((prev) => ({ ...prev, houseAge: val }));
     } else if (name === 'sqft' || name === 'bedrooms' || name === 'bathrooms') {
-      const calculatedRooms = Number((nextSpecs.bedrooms + nextSpecs.bathrooms + (nextSpecs.sqft / 500)).toFixed(2));
-      const calculatedIncome = Number((2.0 + (nextSpecs.sqft / 1000) * 0.8).toFixed(2));
-      const calculatedOccup = Number((Math.max(1.0, nextSpecs.bedrooms * 0.7 + 0.3)).toFixed(1));
+      const sqftVal = name === 'sqft' ? val : (Number(specsData.sqft) || 2200);
+      const bedVal = name === 'bedrooms' ? val : (Number(specsData.bedrooms) || 4);
+      const bathVal = name === 'bathrooms' ? val : (Number(specsData.bathrooms) || 3);
+      const calculatedRooms = Number((bedVal + bathVal + (sqftVal / 500)).toFixed(2));
+      const calculatedIncome = Number((2.0 + (sqftVal / 1000) * 0.8).toFixed(2));
+      const calculatedOccup = Number((Math.max(1.0, bedVal * 0.7 + 0.3)).toFixed(1));
       setModelData((prev) => ({
         ...prev,
         aveRooms: calculatedRooms,
@@ -93,29 +112,41 @@ export const PropertyIntakeForm: React.FC<PropertyIntakeFormProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Fallbacks for empty inputs
+    const safeSqft = specsData.sqft === '' ? 2200 : Number(specsData.sqft);
+    const safeBedrooms = specsData.bedrooms === '' ? 4 : Number(specsData.bedrooms);
+    const safeBathrooms = specsData.bathrooms === '' ? 3 : Number(specsData.bathrooms);
+    const safeAge = specsData.age === '' ? 15 : Number(specsData.age);
+
+    const safeMedInc = modelData.medInc === '' ? 3.5 : Number(modelData.medInc);
+    const safeHouseAge = modelData.houseAge === '' ? 15 : Number(modelData.houseAge);
+    const safeAveRooms = modelData.aveRooms === '' ? 5.8 : Number(modelData.aveRooms);
+    const safeAveOccup = modelData.aveOccup === '' ? 2.8 : Number(modelData.aveOccup);
+
     if (activeTab === 'california_model') {
       onSubmit({
-        medInc: modelData.medInc,
-        houseAge: modelData.houseAge,
-        aveRooms: modelData.aveRooms,
-        aveOccup: modelData.aveOccup,
-        sqft: specsData.sqft,
-        bedrooms: specsData.bedrooms,
-        bathrooms: specsData.bathrooms,
-        age: specsData.age,
+        medInc: safeMedInc,
+        houseAge: safeHouseAge,
+        aveRooms: safeAveRooms,
+        aveOccup: safeAveOccup,
+        sqft: safeSqft,
+        bedrooms: safeBedrooms,
+        bathrooms: safeBathrooms,
+        age: safeAge,
         locationRisk: specsData.locationRisk,
       });
     } else {
       onSubmit({
-        sqft: specsData.sqft,
-        bedrooms: specsData.bedrooms,
-        bathrooms: specsData.bathrooms,
-        age: specsData.age,
+        sqft: safeSqft,
+        bedrooms: safeBedrooms,
+        bathrooms: safeBathrooms,
+        age: safeAge,
         locationRisk: specsData.locationRisk,
-        medInc: modelData.medInc,
-        houseAge: modelData.houseAge,
-        aveRooms: modelData.aveRooms,
-        aveOccup: modelData.aveOccup,
+        medInc: safeMedInc,
+        houseAge: safeHouseAge,
+        aveRooms: safeAveRooms,
+        aveOccup: safeAveOccup,
       });
     }
   };
@@ -178,8 +209,8 @@ export const PropertyIntakeForm: React.FC<PropertyIntakeFormProps> = ({
                 label="Area (Square Footage)"
                 suffix="sq ft"
                 value={specsData.sqft}
-                min={300}
-                max={15000}
+                placeholder="e.g. 2200"
+                min={0}
                 step={50}
                 onChange={(v) => handleSpecsChange('sqft', v)}
                 disabled={isLoading}
@@ -189,8 +220,8 @@ export const PropertyIntakeForm: React.FC<PropertyIntakeFormProps> = ({
                 icon={BedDouble}
                 label="Bedrooms"
                 value={specsData.bedrooms}
-                min={1}
-                max={10}
+                placeholder="e.g. 4"
+                min={0}
                 step={1}
                 onChange={(v) => handleSpecsChange('bedrooms', v)}
                 disabled={isLoading}
@@ -200,8 +231,8 @@ export const PropertyIntakeForm: React.FC<PropertyIntakeFormProps> = ({
                 icon={Bath}
                 label="Bathrooms"
                 value={specsData.bathrooms}
-                min={1}
-                max={8}
+                placeholder="e.g. 3"
+                min={0}
                 step={0.5}
                 onChange={(v) => handleSpecsChange('bathrooms', v)}
                 disabled={isLoading}
@@ -212,8 +243,8 @@ export const PropertyIntakeForm: React.FC<PropertyIntakeFormProps> = ({
                 label="Property Age"
                 suffix="years"
                 value={specsData.age}
+                placeholder="e.g. 15"
                 min={0}
-                max={120}
                 step={1}
                 onChange={(v) => handleSpecsChange('age', v)}
                 disabled={isLoading}
@@ -235,7 +266,7 @@ export const PropertyIntakeForm: React.FC<PropertyIntakeFormProps> = ({
                     min="1"
                     max="100"
                     value={specsData.locationRisk}
-                    onChange={(e) => handleSpecsChange('locationRisk', parseInt(e.target.value, 10) || 1)}
+                    onChange={(e) => handleSpecsChange('locationRisk', e.target.value)}
                     disabled={isLoading}
                     className="w-full accent-indigo cursor-pointer py-3"
                   />
@@ -253,21 +284,22 @@ export const PropertyIntakeForm: React.FC<PropertyIntakeFormProps> = ({
                     Median Area Income (<span className="text-indigo font-mono">MedInc</span>)
                   </label>
                   <span className="text-xs text-muted-foreground font-mono">
-                    ${(modelData.medInc * 10000).toLocaleString()}/yr
+                    {modelData.medInc !== '' && !isNaN(Number(modelData.medInc))
+                      ? `$${(Number(modelData.medInc) * 10000).toLocaleString()}/yr`
+                      : '--'}
                   </span>
                 </div>
                 <div className="flex items-center rounded-xl border border-white/10 bg-white/[0.02] px-3 focus-within:border-accent focus-within:bg-white/[0.04]">
                   <input
                     type="number"
                     step="0.1"
-                    min="0.1"
-                    max="15.0"
+                    min="0"
                     name="medInc"
                     value={modelData.medInc}
                     onChange={handleModelChange}
+                    placeholder="e.g. 3.5"
                     disabled={isLoading}
                     className="w-full bg-transparent py-2.5 font-mono text-sm tabular-nums text-foreground outline-none"
-                    required
                   />
                   <span className="text-xs text-muted-foreground font-mono shrink-0">$10k units</span>
                 </div>
@@ -282,13 +314,12 @@ export const PropertyIntakeForm: React.FC<PropertyIntakeFormProps> = ({
                     <input
                       type="number"
                       min="0"
-                      max="120"
                       name="houseAge"
                       value={modelData.houseAge}
                       onChange={handleModelChange}
+                      placeholder="e.g. 15"
                       disabled={isLoading}
                       className="w-full bg-transparent py-2.5 font-mono text-xs tabular-nums text-foreground outline-none"
-                      required
                     />
                   </div>
                 </div>
@@ -301,14 +332,13 @@ export const PropertyIntakeForm: React.FC<PropertyIntakeFormProps> = ({
                     <input
                       type="number"
                       step="0.1"
-                      min="1"
-                      max="20"
+                      min="0"
                       name="aveRooms"
                       value={modelData.aveRooms}
                       onChange={handleModelChange}
+                      placeholder="e.g. 5.8"
                       disabled={isLoading}
                       className="w-full bg-transparent py-2.5 font-mono text-xs tabular-nums text-foreground outline-none"
-                      required
                     />
                   </div>
                 </div>
@@ -321,14 +351,13 @@ export const PropertyIntakeForm: React.FC<PropertyIntakeFormProps> = ({
                     <input
                       type="number"
                       step="0.1"
-                      min="0.5"
-                      max="10"
+                      min="0"
                       name="aveOccup"
                       value={modelData.aveOccup}
                       onChange={handleModelChange}
+                      placeholder="e.g. 2.8"
                       disabled={isLoading}
                       className="w-full bg-transparent py-2.5 font-mono text-xs tabular-nums text-foreground outline-none"
-                      required
                     />
                   </div>
                 </div>
@@ -397,17 +426,19 @@ function Field({
   min,
   max,
   step,
+  placeholder,
   onChange,
   disabled,
 }: {
   icon: React.ComponentType<{ className?: string }>;
   label: string;
   suffix?: string;
-  value: number;
-  min: number;
-  max: number;
-  step: number;
-  onChange: (v: number) => void;
+  value: number | string;
+  min?: number;
+  max?: number;
+  step?: number;
+  placeholder?: string;
+  onChange: (v: string) => void;
   disabled?: boolean;
 }) {
   return (
@@ -424,11 +455,10 @@ function Field({
           min={min}
           max={max}
           step={step}
+          placeholder={placeholder}
           disabled={disabled}
           onChange={(e) => {
-            const v = Number(e.target.value);
-            if (Number.isNaN(v)) return;
-            onChange(Math.min(max, Math.max(min, v)));
+            onChange(e.target.value);
           }}
           className="w-full bg-transparent py-2.5 font-mono text-sm tabular-nums text-foreground outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none disabled:opacity-50"
         />

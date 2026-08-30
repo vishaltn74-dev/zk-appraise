@@ -1,7 +1,7 @@
 # Graph Report - zk-appraise  (2026-08-30)
 
 ## Corpus Check
-- 96 files · ~58,486 words
+- 96 files · ~58,711 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `58e1ab32`
+- Built from commit: `2b3aaf65`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -100,10 +100,10 @@
   ai-engine/train_valuation_model.py → zk-circuits/src/model_gen.py
 - `train_and_export()` --uses--> `RealEstateValuationModel`  [INFERRED]
   ai-engine/train_valuation_model.py → zk-circuits/src/model_gen.py
-- `test_e2e_circuit_compilation_and_abi_export()` --calls--> `export_verifier_abi()`  [INFERRED]
-  tests/e2e/test_full_pipeline.py → zk-circuits/src/export_abi.py
-- `test_dynamic_scale_extraction()` --calls--> `extract_scale_from_settings()`  [INFERRED]
-  tests/zk/test_compact_abi.py → zk-circuits/src/export_abi.py
+- `test_e2e_circuit_compilation_and_abi_export()` --calls--> `build_circuit_pipeline()`  [INFERRED]
+  tests/e2e/test_full_pipeline.py → zk-circuits/src/circuit_builder.py
+- `test_e2e_circuit_compilation_and_abi_export()` --calls--> `export_onnx_model()`  [INFERRED]
+  tests/e2e/test_full_pipeline.py → zk-circuits/src/model_gen.py
 
 ## Import Cycles
 - None detected.
@@ -128,7 +128,7 @@ Nodes (27): ModelError, Raised when training, model export, or model inference f
 
 ### Community 4 - "test_ai_engine.py"
 Cohesion: 0.05
-Nodes (45): audit_event(), Any, Path, Append-only audit events for pipeline operations., Append a redacted audit event to the local audit trail., ndarray, Calculate ZK MAPE with an explicit near-zero denominator floor. Parameters:…, safe_zk_mape() (+37 more)
+Nodes (48): audit_event(), Any, Path, Append-only audit events for pipeline operations., Append a redacted audit event to the local audit trail., Path, Return health status without modifying model artifacts. Parameters: directory:…, run_health_check() (+40 more)
 
 ### Community 5 - "package.json"
 Cohesion: 0.06
@@ -155,8 +155,8 @@ Cohesion: 0.07
 Nodes (26): 1) The Fundamental Visibility Rule, 2) Privacy Audit Checklist, 3) What Leaks Even With Witnesses, 4) Data Leak Patterns (The Common Mistakes), 5) Defensive Patterns (Full Implementations), 6) Transaction Semantics — Security Implications, 7) What ZK Proofs Do and Do Not Guarantee, 8) Merkle Tree Depth Selection (+18 more)
 
 ### Community 12 - "model_config.py"
-Cohesion: 0.07
-Nodes (46): Shared CLI parsing with safe path, timeout, retry, and logging controls., ArtifactValidationError, ConfigurationError, Custom exception hierarchy for actionable pipeline failures., Raised when generated artifacts violate the cross-team contract., Raised when canonical configuration is internally inconsistent., Path, Read-only health check for model artifact integrity and runtime readiness. (+38 more)
+Cohesion: 0.08
+Nodes (43): Shared CLI parsing with safe path, timeout, retry, and logging controls., ArtifactValidationError, ConfigurationError, Custom exception hierarchy for actionable pipeline failures., Raised when generated artifacts violate the cross-team contract., Raised when canonical configuration is internally inconsistent., Read-only health check for model artifact integrity and runtime readiness., Numerical metrics and persisted performance baselines. (+35 more)
 
 ### Community 13 - "zk-appraise AI Engine — Production-Hardened"
 Cohesion: 0.08
@@ -199,8 +199,8 @@ Cohesion: 0.16
 Nodes (13): PropertyIntakeFormProps, getCachedCircuitAsset(), openAssetDatabase(), setCachedCircuitAsset(), PropertyInputs, ProverGenerateMessage, ProverInitMessage, ProverProgress (+5 more)
 
 ### Community 23 - "export_abi.py"
-Cohesion: 0.20
-Nodes (15): test_dynamic_scale_extraction(), test_export_verifier_abi_structure(), test_proof_serialization_to_compact_bytes(), test_public_input_marshaling(), test_vk_commitment_computation(), compute_vk_commitment(), export_verifier_abi(), extract_scale_from_settings() (+7 more)
+Cohesion: 0.18
+Nodes (16): test_e2e_circuit_compilation_and_abi_export(), test_dynamic_scale_extraction(), test_export_verifier_abi_structure(), test_proof_serialization_to_compact_bytes(), test_public_input_marshaling(), test_vk_commitment_computation(), compute_vk_commitment(), export_verifier_abi() (+8 more)
 
 ### Community 24 - "Midnight Network ZK Loan Application"
 Cohesion: 0.12
@@ -231,8 +231,8 @@ Cohesion: 0.22
 Nodes (14): Namespace, compute_sha256_hash(), extract_circuit_scale(), main(), parse_arguments(), print_audit_banner(), Any, Executes self-contained mock verification testing for auditor pre-flight. (+6 more)
 
 ### Community 32 - "model_gen.py"
-Cohesion: 0.15
-Nodes (12): test_e2e_circuit_compilation_and_abi_export(), fixture, setup_adversarial_pipeline(), fixture, setup_pipeline(), fixture, setup_security_pipeline(), build_circuit_pipeline() (+4 more)
+Cohesion: 0.21
+Nodes (11): fixture, setup_adversarial_pipeline(), fixture, setup_pipeline(), fixture, setup_security_pipeline(), build_circuit_pipeline(), export_onnx_model() (+3 more)
 
 ### Community 33 - "test_security_audit.py"
 Cohesion: 0.15

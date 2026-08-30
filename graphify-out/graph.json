@@ -1542,18 +1542,6 @@
       "source_location": "L789"
     },
     {
-      "id": "ai_engine_health_check_run_health_check",
-      "label": "run_health_check()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 12,
-      "community_name": "model_config.py",
-      "file_type": "code",
-      "norm_label": "run_health_check()",
-      "source_file": "ai-engine/health_check.py",
-      "source_location": "L27"
-    },
-    {
       "id": "ai_engine_model_config_artifact_dir",
       "label": "artifact_dir()",
       "_callable": true,
@@ -1923,7 +1911,7 @@
       "file_type": "code",
       "norm_label": "field()",
       "source_file": "frontend/src/components/PropertyIntakeForm.tsx",
-      "source_location": "L392"
+      "source_location": "L421"
     },
     {
       "id": "frontend_src_services_proofservice_getcachedcircuitasset",
@@ -2008,6 +1996,18 @@
       "norm_label": "emitresult()",
       "source_file": "frontend/src/workers/prover.worker.ts",
       "source_location": "L112"
+    },
+    {
+      "id": "tests_e2e_test_full_pipeline_test_e2e_circuit_compilation_and_abi_export",
+      "label": "test_e2e_circuit_compilation_and_abi_export()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "export_abi.py",
+      "file_type": "code",
+      "norm_label": "test_e2e_circuit_compilation_and_abi_export()",
+      "source_file": "tests/e2e/test_full_pipeline.py",
+      "source_location": "L21"
     },
     {
       "id": "tests_zk_test_compact_abi_test_dynamic_scale_extraction",
@@ -2694,18 +2694,6 @@
       "source_location": "L1532"
     },
     {
-      "id": "tests_e2e_test_full_pipeline_test_e2e_circuit_compilation_and_abi_export",
-      "label": "test_e2e_circuit_compilation_and_abi_export()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "model_gen.py",
-      "file_type": "code",
-      "norm_label": "test_e2e_circuit_compilation_and_abi_export()",
-      "source_file": "tests/e2e/test_full_pipeline.py",
-      "source_location": "L21"
-    },
-    {
       "id": "tests_zk_test_adversarial_setup_adversarial_pipeline",
       "label": "setup_adversarial_pipeline()",
       "_callable": true,
@@ -2716,42 +2704,6 @@
       "norm_label": "setup_adversarial_pipeline()",
       "source_file": "tests/zk/test_adversarial.py",
       "source_location": "L21"
-    },
-    {
-      "id": "tests_zk_test_adversarial_test_extreme_out_of_bounds_clamping",
-      "label": "test_extreme_out_of_bounds_clamping()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "model_gen.py",
-      "file_type": "code",
-      "norm_label": "test_extreme_out_of_bounds_clamping()",
-      "source_file": "tests/zk/test_adversarial.py",
-      "source_location": "L76"
-    },
-    {
-      "id": "tests_zk_test_adversarial_test_tampered_input_witness_rejection",
-      "label": "test_tampered_input_witness_rejection()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "model_gen.py",
-      "file_type": "code",
-      "norm_label": "test_tampered_input_witness_rejection()",
-      "source_file": "tests/zk/test_adversarial.py",
-      "source_location": "L52"
-    },
-    {
-      "id": "tests_zk_test_adversarial_test_tampered_output_rejection",
-      "label": "test_tampered_output_rejection()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "model_gen.py",
-      "file_type": "code",
-      "norm_label": "test_tampered_output_rejection()",
-      "source_file": "tests/zk/test_adversarial.py",
-      "source_location": "L28"
     },
     {
       "id": "tests_zk_test_fidelity_setup_pipeline",
@@ -2932,6 +2884,42 @@
       "norm_label": "record_performance_baseline()",
       "source_file": "ai-engine/metrics_utils.py",
       "source_location": "L40"
+    },
+    {
+      "id": "tests_zk_test_adversarial_test_extreme_out_of_bounds_clamping",
+      "label": "test_extreme_out_of_bounds_clamping()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 37,
+      "community_name": "test_fidelity.py",
+      "file_type": "code",
+      "norm_label": "test_extreme_out_of_bounds_clamping()",
+      "source_file": "tests/zk/test_adversarial.py",
+      "source_location": "L76"
+    },
+    {
+      "id": "tests_zk_test_adversarial_test_tampered_input_witness_rejection",
+      "label": "test_tampered_input_witness_rejection()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 37,
+      "community_name": "test_fidelity.py",
+      "file_type": "code",
+      "norm_label": "test_tampered_input_witness_rejection()",
+      "source_file": "tests/zk/test_adversarial.py",
+      "source_location": "L52"
+    },
+    {
+      "id": "tests_zk_test_adversarial_test_tampered_output_rejection",
+      "label": "test_tampered_output_rejection()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 37,
+      "community_name": "test_fidelity.py",
+      "file_type": "code",
+      "norm_label": "test_tampered_output_rejection()",
+      "source_file": "tests/zk/test_adversarial.py",
+      "source_location": "L28"
     },
     {
       "id": "tests_zk_test_fidelity_test_adversarial_witness_rejection",
@@ -3148,6 +3136,18 @@
       "norm_label": "audit_event()",
       "source_file": "ai-engine/audit_utils.py",
       "source_location": "L17"
+    },
+    {
+      "id": "ai_engine_health_check_run_health_check",
+      "label": "run_health_check()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "test_ai_engine.py",
+      "file_type": "code",
+      "norm_label": "run_health_check()",
+      "source_file": "ai-engine/health_check.py",
+      "source_location": "L27"
     },
     {
       "id": "ai_engine_metrics_utils_safe_zk_mape",
@@ -3639,7 +3639,7 @@
       "file_type": "code",
       "norm_label": "breakdownrow()",
       "source_file": "frontend/src/components/LoanCalculator.tsx",
-      "source_location": "L296"
+      "source_location": "L307"
     },
     {
       "id": "frontend_src_components_loancalculator_currency",
@@ -4916,17 +4916,6 @@
       "source_location": "L1"
     },
     {
-      "id": "ai_engine_health_check_py_path",
-      "label": "Path",
-      "_origin": "ast",
-      "community": 12,
-      "community_name": "model_config.py",
-      "file_type": "code",
-      "norm_label": "path",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
       "id": "ai_engine_metrics_utils",
       "label": "metrics_utils.py",
       "_origin": "ast",
@@ -5057,17 +5046,6 @@
       "norm_label": "read-only health check for model artifact integrity and runtime readiness.",
       "source_file": "ai-engine/health_check.py",
       "source_location": "L1"
-    },
-    {
-      "id": "ai_engine_health_check_rationale_28",
-      "label": "Return health status without modifying model artifacts. Parameters: directory:\u2026",
-      "_origin": "ast",
-      "community": 12,
-      "community_name": "model_config.py",
-      "file_type": "rationale",
-      "norm_label": "return health status without modifying model artifacts. parameters: directory:...",
-      "source_file": "ai-engine/health_check.py",
-      "source_location": "L28"
     },
     {
       "id": "ai_engine_metrics_utils_rationale_1",
@@ -8908,28 +8886,6 @@
       "source_location": "L73"
     },
     {
-      "id": "tests_e2e_test_full_pipeline",
-      "label": "test_full_pipeline.py",
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "model_gen.py",
-      "file_type": "code",
-      "norm_label": "test_full_pipeline.py",
-      "source_file": "tests/e2e/test_full_pipeline.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "tests_zk_test_adversarial",
-      "label": "test_adversarial.py",
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "model_gen.py",
-      "file_type": "code",
-      "norm_label": "test_adversarial.py",
-      "source_file": "tests/zk/test_adversarial.py",
-      "source_location": "L1"
-    },
-    {
       "id": "tests_zk_test_adversarial_py_fixture",
       "label": "fixture",
       "_origin": "ast",
@@ -8961,17 +8917,6 @@
       "norm_label": "fixture",
       "source_file": "",
       "source_location": ""
-    },
-    {
-      "id": "zk_circuits_src_circuit_builder",
-      "label": "circuit_builder.py",
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "model_gen.py",
-      "file_type": "code",
-      "norm_label": "circuit_builder.py",
-      "source_file": "zk-circuits/src/circuit_builder.py",
-      "source_location": "L1"
     },
     {
       "id": "zk_circuits_src_model_gen",
@@ -9429,6 +9374,28 @@
       "source_location": "L129"
     },
     {
+      "id": "tests_e2e_test_full_pipeline",
+      "label": "test_full_pipeline.py",
+      "_origin": "ast",
+      "community": 37,
+      "community_name": "test_fidelity.py",
+      "file_type": "code",
+      "norm_label": "test_full_pipeline.py",
+      "source_file": "tests/e2e/test_full_pipeline.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "tests_zk_test_adversarial",
+      "label": "test_adversarial.py",
+      "_origin": "ast",
+      "community": 37,
+      "community_name": "test_fidelity.py",
+      "file_type": "code",
+      "norm_label": "test_adversarial.py",
+      "source_file": "tests/zk/test_adversarial.py",
+      "source_location": "L1"
+    },
+    {
       "id": "tests_zk_test_fidelity",
       "label": "test_fidelity.py",
       "_origin": "ast",
@@ -9437,6 +9404,17 @@
       "file_type": "code",
       "norm_label": "test_fidelity.py",
       "source_file": "tests/zk/test_fidelity.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "zk_circuits_src_circuit_builder",
+      "label": "circuit_builder.py",
+      "_origin": "ast",
+      "community": 37,
+      "community_name": "test_fidelity.py",
+      "file_type": "code",
+      "norm_label": "circuit_builder.py",
+      "source_file": "zk-circuits/src/circuit_builder.py",
       "source_location": "L1"
     },
     {
@@ -9715,6 +9693,17 @@
       "source_location": ""
     },
     {
+      "id": "ai_engine_health_check_py_path",
+      "label": "Path",
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "test_ai_engine.py",
+      "file_type": "code",
+      "norm_label": "path",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
       "id": "ai_engine_metrics_utils_py_ndarray",
       "label": "ndarray",
       "_origin": "ast",
@@ -9801,6 +9790,17 @@
       "norm_label": "append a redacted audit event to the local audit trail.",
       "source_file": "ai-engine/audit_utils.py",
       "source_location": "L18"
+    },
+    {
+      "id": "ai_engine_health_check_rationale_28",
+      "label": "Return health status without modifying model artifacts. Parameters: directory:\u2026",
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "test_ai_engine.py",
+      "file_type": "rationale",
+      "norm_label": "return health status without modifying model artifacts. parameters: directory:...",
+      "source_file": "ai-engine/health_check.py",
+      "source_location": "L28"
     },
     {
       "id": "ai_engine_metrics_utils_rationale_17",
@@ -26466,7 +26466,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/components/LoanCalculator.tsx",
-      "source_location": "L296",
+      "source_location": "L307",
       "weight": 1.0
     },
     {
@@ -26510,7 +26510,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/components/PropertyIntakeForm.tsx",
-      "source_location": "L392",
+      "source_location": "L421",
       "weight": 1.0
     },
     {
@@ -32246,5 +32246,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "58e1ab32b149b4a420ee898f8884f7d2b367e7ff"
+  "built_at_commit": "2b3aaf65bcaed2abd9e442b1693565aed7206d55"
 }

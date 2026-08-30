@@ -182,11 +182,18 @@ export const LoanCalculator: React.FC<LoanCalculatorProps> = ({
               <input
                 type="number"
                 min={0}
-                value={requestedLoanUsd}
-                onChange={(e) => onRequestedLoanChange(Math.max(0, parseFloat(e.target.value) || 0))}
+                value={requestedLoanUsd === 0 ? '' : requestedLoanUsd}
+                onChange={(e) => {
+                  if (e.target.value === '') {
+                    onRequestedLoanChange(0);
+                  } else {
+                    const parsed = parseFloat(e.target.value);
+                    onRequestedLoanChange(isNaN(parsed) ? 0 : Math.max(0, parsed));
+                  }
+                }}
                 disabled={!appraisalValuationUsd || isSubmitting}
                 className="w-full bg-transparent py-2.5 font-mono text-sm tabular-nums text-foreground outline-none disabled:opacity-50"
-                placeholder="Loan amount"
+                placeholder="e.g. 300000"
               />
             </div>
           </div>
@@ -204,10 +211,14 @@ export const LoanCalculator: React.FC<LoanCalculatorProps> = ({
                 type="number"
                 min={1000}
                 max={9999}
-                value={secretPin || ''}
+                value={secretPin === 0 ? '' : secretPin}
                 onChange={(e) => {
-                  const val = parseInt(e.target.value, 10);
-                  onSecretPinChange(isNaN(val) ? 0 : Math.max(0, Math.min(9999, val)));
+                  if (e.target.value === '') {
+                    onSecretPinChange(0);
+                  } else {
+                    const val = parseInt(e.target.value, 10);
+                    onSecretPinChange(isNaN(val) ? 0 : Math.max(0, Math.min(9999, val)));
+                  }
                 }}
                 disabled={isSubmitting}
                 className="w-full bg-transparent py-2.5 font-mono text-sm tabular-nums text-foreground outline-none disabled:opacity-50"
