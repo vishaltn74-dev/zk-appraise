@@ -11,7 +11,7 @@
     "param_visibility": "Fixed",
     "output_visibility": "Public",
     "vk_size_bytes": 66823,
-    "vk_commitment_hash": "0xec98880b8c265bdabc0c418cb6fc8428f18885e2f53a7f7d8998c22dabace43e"
+    "vk_commitment_hash": "0xdb8e587a5dbc23432a3e62a28094f6ae544cb1b34ab051f268dc86bcff8f1032"
   },
   "public_inputs_schema": {
     "tuple_format": "[quantized_valuation_scalar, scale_factor, vk_commitment]",
@@ -91,7 +91,7 @@
   "downstream_handoff": {
     "person_3_midnight_compact": {
       "verification_key_file": "zk-circuits/vk.key",
-      "vk_commitment": "0xec98880b8c265bdabc0c418cb6fc8428f18885e2f53a7f7d8998c22dabace43e",
+      "vk_commitment": "0xdb8e587a5dbc23432a3e62a28094f6ae544cb1b34ab051f268dc86bcff8f1032",
       "public_commitment_layout": [
         "quantized_valuation_scalar",
         "scale_factor",

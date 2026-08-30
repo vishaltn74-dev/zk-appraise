@@ -1,0 +1,545 @@
+{
+  "compiler-version": "0.34.0",
+  "language-version": "0.26.0",
+  "runtime-version": "0.19.0",
+  "circuits": [
+    {
+      "name": "deriveUserPublicKey",
+      "pure": true,
+      "proof": false,
+      "arguments": [
+        {
+          "name": "sk",
+          "type": {
+            "type-name": "Alias",
+            "name": "UserSecretKey",
+            "type": {
+              "type-name": "Bytes",
+              "length": 32
+            }
+          }
+        },
+        {
+          "name": "pin",
+          "type": {
+            "type-name": "Uint",
+            "maxval": 65535
+          }
+        }
+      ],
+      "result-type": {
+        "type-name": "Alias",
+        "name": "UserPublicKey",
+        "type": {
+          "type-name": "Bytes",
+          "length": 32
+        }
+      }
+    },
+    {
+      "name": "deriveAdminPublicKey",
+      "pure": true,
+      "proof": false,
+      "arguments": [
+        {
+          "name": "sk",
+          "type": {
+            "type-name": "Alias",
+            "name": "UserSecretKey",
+            "type": {
+              "type-name": "Bytes",
+              "length": 32
+            }
+          }
+        }
+      ],
+      "result-type": {
+        "type-name": "Alias",
+        "name": "AdminPublicKey",
+        "type": {
+          "type-name": "Bytes",
+          "length": 32
+        }
+      }
+    },
+    {
+      "name": "requestAppraisalVerification",
+      "pure": false,
+      "proof": true,
+      "arguments": [
+        {
+          "name": "loanThreshold",
+          "type": {
+            "type-name": "Uint",
+            "maxval": 4294967295
+          }
+        },
+        {
+          "name": "secretPin",
+          "type": {
+            "type-name": "Uint",
+            "maxval": 65535
+          }
+        }
+      ],
+      "result-type": {
+        "type-name": "Tuple",
+        "types": [
+        ]
+      }
+    },
+    {
+      "name": "respondToLoan",
+      "pure": false,
+      "proof": true,
+      "arguments": [
+        {
+          "name": "loanId",
+          "type": {
+            "type-name": "Uint",
+            "maxval": 65535
+          }
+        },
+        {
+          "name": "secretPin",
+          "type": {
+            "type-name": "Uint",
+            "maxval": 65535
+          }
+        },
+        {
+          "name": "accept",
+          "type": {
+            "type-name": "Boolean"
+          }
+        }
+      ],
+      "result-type": {
+        "type-name": "Tuple",
+        "types": [
+        ]
+      }
+    },
+    {
+      "name": "changePin",
+      "pure": false,
+      "proof": true,
+      "arguments": [
+        {
+          "name": "oldPin",
+          "type": {
+            "type-name": "Uint",
+            "maxval": 65535
+          }
+        },
+        {
+          "name": "newPin",
+          "type": {
+            "type-name": "Uint",
+            "maxval": 65535
+          }
+        }
+      ],
+      "result-type": {
+        "type-name": "Tuple",
+        "types": [
+        ]
+      }
+    },
+    {
+      "name": "registerProvider",
+      "pure": false,
+      "proof": true,
+      "arguments": [
+        {
+          "name": "providerId",
+          "type": {
+            "type-name": "Uint",
+            "maxval": 65535
+          }
+        },
+        {
+          "name": "providerPk",
+          "type": {
+            "type-name": "JubjubPoint"
+          }
+        }
+      ],
+      "result-type": {
+        "type-name": "Tuple",
+        "types": [
+        ]
+      }
+    },
+    {
+      "name": "rotateAdmin",
+      "pure": false,
+      "proof": true,
+      "arguments": [
+        {
+          "name": "newAdmin",
+          "type": {
+            "type-name": "Alias",
+            "name": "AdminPublicKey",
+            "type": {
+              "type-name": "Bytes",
+              "length": 32
+            }
+          }
+        }
+      ],
+      "result-type": {
+        "type-name": "Tuple",
+        "types": [
+        ]
+      }
+    },
+    {
+      "name": "blacklistUser",
+      "pure": false,
+      "proof": true,
+      "arguments": [
+        {
+          "name": "userPk",
+          "type": {
+            "type-name": "Alias",
+            "name": "UserPublicKey",
+            "type": {
+              "type-name": "Bytes",
+              "length": 32
+            }
+          }
+        }
+      ],
+      "result-type": {
+        "type-name": "Tuple",
+        "types": [
+        ]
+      }
+    },
+    {
+      "name": "registerAppraisal",
+      "pure": false,
+      "proof": true,
+      "arguments": [
+        {
+          "name": "commitment",
+          "type": {
+            "type-name": "Bytes",
+            "length": 32
+          }
+        }
+      ],
+      "result-type": {
+        "type-name": "Tuple",
+        "types": [
+        ]
+      }
+    }
+  ],
+  "witnesses": [
+    {
+      "name": "getAttestedAppraisalWitness",
+      "arguments": [
+      ],
+      "result type": {
+        "type-name": "Tuple",
+        "types": [
+          {
+            "type-name": "Struct",
+            "name": "AppraisalReport",
+            "elements": [
+              {
+                "name": "value",
+                "type": {
+                  "type-name": "Uint",
+                  "maxval": 18446744073709551615
+                }
+              },
+              {
+                "name": "propertyHash",
+                "type": {
+                  "type-name": "Bytes",
+                  "length": 32
+                }
+              },
+              {
+                "name": "appraiserId",
+                "type": {
+                  "type-name": "Uint",
+                  "maxval": 65535
+                }
+              },
+              {
+                "name": "timestamp",
+                "type": {
+                  "type-name": "Uint",
+                  "maxval": 18446744073709551615
+                }
+              },
+              {
+                "name": "nonce",
+                "type": {
+                  "type-name": "Bytes",
+                  "length": 32
+                }
+              }
+            ]
+          },
+          {
+            "type-name": "Alias",
+            "name": "SchnorrSignature",
+            "type": {
+              "type-name": "Bytes",
+              "length": 64
+            }
+          },
+          {
+            "type-name": "Uint",
+            "maxval": 65535
+          }
+        ]
+      }
+    },
+    {
+      "name": "getUserSecret",
+      "arguments": [
+      ],
+      "result type": {
+        "type-name": "Alias",
+        "name": "UserSecretKey",
+        "type": {
+          "type-name": "Bytes",
+          "length": 32
+        }
+      }
+    },
+    {
+      "name": "getAppraisalCommitment",
+      "arguments": [
+      ],
+      "result type": {
+        "type-name": "Bytes",
+        "length": 32
+      }
+    },
+    {
+      "name": "findAppraisalPath",
+      "arguments": [
+      ],
+      "result type": {
+        "type-name": "Struct",
+        "name": "MerkleTreePath",
+        "elements": [
+          {
+            "name": "leaf",
+            "type": {
+              "type-name": "Bytes",
+              "length": 32
+            }
+          },
+          {
+            "name": "path",
+            "type": {
+              "type-name": "Vector",
+              "length": 16,
+              "type": {
+                "type-name": "Struct",
+                "name": "MerkleTreePathEntry",
+                "elements": [
+                  {
+                    "name": "sibling",
+                    "type": {
+                      "type-name": "Struct",
+                      "name": "MerkleTreeDigest",
+                      "elements": [
+                        {
+                          "name": "field",
+                          "type": {
+                            "type-name": "Field"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "name": "goes_left",
+                    "type": {
+                      "type-name": "Boolean"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "contracts": [
+  ],
+  "ledger": [
+    {
+      "name": "appraisalRegistry",
+      "index": 0,
+      "exported": true,
+      "storage": "MerkleTree",
+      "depth": 16,
+      "type": {
+        "type-name": "Bytes",
+        "length": 32
+      }
+    },
+    {
+      "name": "nullifiers",
+      "index": 1,
+      "exported": true,
+      "storage": "Set",
+      "type": {
+        "type-name": "Bytes",
+        "length": 32
+      }
+    },
+    {
+      "name": "providers",
+      "index": 2,
+      "exported": true,
+      "storage": "Map",
+      "key": {
+        "type-name": "Uint",
+        "maxval": 65535
+      },
+      "value": {
+        "type-name": "JubjubPoint"
+      }
+    },
+    {
+      "name": "contractAdmin",
+      "index": 3,
+      "exported": true,
+      "storage": "Cell",
+      "type": {
+        "type-name": "Alias",
+        "name": "AdminPublicKey",
+        "type": {
+          "type-name": "Bytes",
+          "length": 32
+        }
+      }
+    },
+    {
+      "name": "loanOutcomes",
+      "index": 4,
+      "exported": true,
+      "storage": "Map",
+      "key": {
+        "type-name": "Struct",
+        "name": "LoanKey",
+        "elements": [
+          {
+            "name": "user",
+            "type": {
+              "type-name": "Alias",
+              "name": "UserPublicKey",
+              "type": {
+                "type-name": "Bytes",
+                "length": 32
+              }
+            }
+          },
+          {
+            "name": "loanId",
+            "type": {
+              "type-name": "Uint",
+              "maxval": 65535
+            }
+          }
+        ]
+      },
+      "value": {
+        "type-name": "Struct",
+        "name": "LoanOutcome",
+        "elements": [
+          {
+            "name": "authorizedAmount",
+            "type": {
+              "type-name": "Uint",
+              "maxval": 4294967295
+            }
+          },
+          {
+            "name": "status",
+            "type": {
+              "type-name": "Enum",
+              "name": "LoanStatus",
+              "elements": [
+                "Approved",
+                "Rejected",
+                "Proposed",
+                "NotAccepted"
+              ]
+            }
+          },
+          {
+            "name": "appraisalTier",
+            "type": {
+              "type-name": "Enum",
+              "name": "AppraisalTier",
+              "elements": [
+                "Platinum",
+                "Gold",
+                "Silver",
+                "Bronze",
+                "Ineligible"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "blacklist",
+      "index": 5,
+      "exported": true,
+      "storage": "Set",
+      "type": {
+        "type-name": "Alias",
+        "name": "UserPublicKey",
+        "type": {
+          "type-name": "Bytes",
+          "length": 32
+        }
+      }
+    },
+    {
+      "name": "round",
+      "index": 6,
+      "exported": true,
+      "storage": "Counter"
+    },
+    {
+      "name": "nextLoanId",
+      "index": 7,
+      "exported": true,
+      "storage": "Counter"
+    },
+    {
+      "name": "pinMigration",
+      "index": 8,
+      "exported": true,
+      "storage": "Map",
+      "key": {
+        "type-name": "Alias",
+        "name": "UserPublicKey",
+        "type": {
+          "type-name": "Bytes",
+          "length": 32
+        }
+      },
+      "value": {
+        "type-name": "Uint",
+        "maxval": 65535
+      }
+    }
+  ]
+}
