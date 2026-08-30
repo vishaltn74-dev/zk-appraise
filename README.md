@@ -16,7 +16,7 @@
 
 **VeilCred** enables homeowners to unlock decentralized finance (DeFi) liquidity against their real estate equity without exposing sensitive property data, street addresses, appraisal figures, or personal identities to public blockchains.
 
-By combining **local client-side AI valuations (ONNX)**, **Zero-Knowledge Machine Learning proofs (Halo2 / EZKL)**, and **Midnight Network confidential smart contracts (Compact)**, VeilCred allows borrowers to prove collateral eligibility ($\text{Appraised Value} \ge \text{Loan Threshold}$) and qualify for up to **75% LTV** credit tiers—completely in zero-knowledge.
+By combining **local client-side AI valuations (ONNX)**, **Zero-Knowledge Machine Learning proofs (Halo2 / EZKL)**, and **Midnight Network confidential smart contracts (Compact)**, VeilCred allows borrowers to prove collateral eligibility (Appraised Value ≥ Loan Threshold) and qualify for up to **75% LTV** credit tiers—completely in zero-knowledge.
 
 ```
    ┌──────────────────────┐       ┌──────────────────────┐       ┌──────────────────────┐
@@ -53,18 +53,18 @@ sequenceDiagram
 
     Note over User,Model: 1. Zero-Telemetry Valuation
     User->>Model: Ingest Specs (Sqft, Age, Rooms, Location Score)
-    Model-->>User: Compute Estimated Valuation ($y_{\text{val}}$) locally
+    Model-->>User: Compute Estimated Valuation (y_val) locally
 
     Note over User,Prover: 2. Client-Side ZK Proving
-    User->>Prover: Generate Halo2 / KZG SNARK Proof ($\pi$)
-    Prover-->>User: Output Proof ($\pi$) proving: Appraised Value >= Threshold
+    User->>Prover: Generate Halo2 / KZG SNARK Proof (π)
+    Prover-->>User: Output Proof (π) proving: Appraised Value ≥ Threshold
 
     Note over User,Oracle: 3. Cryptographic Attestation
-    User->>Oracle: Submit Appraisal Hash + Derived Identity ($userPk$)
-    Oracle-->>User: Issue Jubjub Schnorr Signature ($\sigma$)
+    User->>Oracle: Submit Appraisal Hash + Derived Identity (userPk)
+    Oracle-->>User: Issue Jubjub Schnorr Signature (σ)
 
     Note over User,Midnight: 4. Private Settlement & Verification
-    User->>Midnight: Submit requestAppraisalVerification(Threshold, PIN, Witness, $\pi$)
+    User->>Midnight: Submit requestAppraisalVerification(Threshold, PIN, Witness, π)
     Midnight->>Midnight: 1. In-circuit Schnorr & Merkle root verification
     Midnight->>Midnight: 2. Enforce Poseidon nullifier (anti-double-pledge)
     Midnight->>Midnight: 3. Grant collateral tier in private ledger state
@@ -79,10 +79,10 @@ VeilCred dynamically classifies collateral into automated credit tiers based on 
 
 | Tier Level | Valuation Floor | Max Eligible Loan | LTV Ceiling | Approval Mode |
 | :--- | :--- | :--- | :--- | :--- |
-| 🥇 **Tier 1 (Platinum)** | $\ge \$1,000,000$ | $\$750,000$ | **75%** | Instant Approval |
-| 🥈 **Tier 2 (Gold)** | $\ge \$750,000$ | $\$525,000$ | **70%** | Instant Approval |
-| 🥉 **Tier 3 (Silver)** | $\ge \$500,000$ | $\$325,000$ | **65%** | Standard Protocol Review |
-| 🎖️ **Tier 4 (Bronze)** | $\ge \$300,000$ | $\$180,000$ | **60%** | Standard Protocol Review |
+| 🥇 **Tier 1 (Platinum)** | ≥ $1,000,000 | $750,000 | **75%** | Instant Approval |
+| 🥈 **Tier 2 (Gold)** | ≥ $750,000 | $525,000 | **70%** | Instant Approval |
+| 🥉 **Tier 3 (Silver)** | ≥ $500,000 | $325,000 | **65%** | Standard Protocol Review |
+| 🎖️ **Tier 4 (Bronze)** | ≥ $300,000 | $180,000 | **60%** | Standard Protocol Review |
 
 ---
 
