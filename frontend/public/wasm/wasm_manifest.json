@@ -1,0 +1,12 @@
+{
+  "name": "ezkl-wasm-runtime",
+  "version": "0.1.0",
+  "target_memory_mb": 1536,
+  "supported_features": ["threads", "simd", "bulk-memory"],
+  "circuits": {
+    "srs": "/zk-circuits/kzg.srs",
+    "pk": "/zk-circuits/pk.key",
+    "compiled": "/zk-circuits/model.compiled",
+    "settings": "/zk-circuits/settings.json"
+  }
+}

@@ -216,3 +216,36 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+.cursor/
+
+# Project generated artifacts & reports
+artifacts/
+
+# Ignore heavy binary circuit artifacts (large PK/SRS) and test temp files
+zk-circuits/*.key
+zk-circuits/*.srs
+zk-circuits/*.compiled
+zk-circuits/*witness*.json
+zk-circuits/*stress*.json
+zk-circuits/*tampered*.json
+zk-circuits/*forged*.json
+zk-circuits/boundary_*.json
+zk-circuits/extreme_*.json
+
+# Node / Frontend
+node_modules/
+dist/
+.vite/
+
+# Markdown files except core documentation & manifests
+*.md
+!README.md
+!PLAN.md
+!AGENTS.md
+!mergingplan.md
+!CRYPTO_REMAINING_PLAN.md
+!zk-circuits/CIRCUIT_MANIFEST.md
+!reports/*.md
+
+
