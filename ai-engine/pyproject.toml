@@ -1,0 +1,20 @@
+[tool.pytest.ini_options]
+testpaths = ["test_ai_engine.py"]
+markers = ["integration: full real dataset/ONNX pipeline"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+ignore_missing_imports = true
+warn_unused_ignores = true
+
+[tool.black]
+line-length = 120
+target-version = ["py310"]
