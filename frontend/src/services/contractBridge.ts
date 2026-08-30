@@ -98,6 +98,23 @@ export class MidnightContractBridge {
       throw new Error('Invalid proof payload: missing 512-byte zero-knowledge SNARK proof.');
     }
 
+    // Contract bridge safety gate (plan Section 23):
+    // Reject SIMULATED_DEV_ONLY proofs in production unless explicitly enabled.
+    if (proofPayload.proverMode === 'SIMULATED_DEV_ONLY') {
+      let devSimAllowed = false;
+      try {
+        devSimAllowed = import.meta.env?.VITE_ALLOW_DEV_SIMULATOR === 'true';
+      } catch { /* not in Vite context */ }
+      if (!devSimAllowed) {
+        throw new Error(
+          'Contract bridge REJECTED simulated proof.\n' +
+          'Synthetic proofs cannot be submitted to the production verification path.\n' +
+          'Set VITE_ALLOW_DEV_SIMULATOR=true for development use only.'
+        );
+      }
+      console.warn('[Contract Bridge] ⚠️ SIMULATED proof accepted — DEVELOPMENT ONLY.');
+    }
+
     const userPk = this.deriveUserPublicKey(userSecretKey, secretPin);
     const tier = this.determineTier(valuationUsd);
     const tierConfig = TIER_DEFINITIONS[tier];

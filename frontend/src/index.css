@@ -3,15 +3,121 @@
 @tailwind utilities;
 
 :root {
-  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   color-scheme: dark;
+
+  --background: #060309;
+  --foreground: #f6f3ff;
+
+  --card: rgba(255, 255, 255, 0.05);
+  --card-foreground: #f6f3ff;
+
+  --popover: #120a24;
+  --popover-foreground: #f6f3ff;
+
+  --primary: #c9f74a;
+  --primary-foreground: #1a0b52;
+
+  --secondary: rgba(255, 255, 255, 0.1);
+  --secondary-foreground: #e6ddff;
+
+  --muted: rgba(255, 255, 255, 0.06);
+  --muted-foreground: #d2c9e8;
+
+  --accent: #c9f74a;
+  --accent-foreground: #1a0b52;
+
+  --destructive: #ff8080;
+
+  --border: rgba(255, 255, 255, 0.14);
+  --input: rgba(255, 255, 255, 0.16);
+  --ring: #c9f74a;
+
+  --indigo: #a78bfa;
+  --violet: #c4b1ff;
+  --emerald: #c9f74a;
+
+  --radius: 0.9rem;
 }
 
-body {
-  margin: 0;
-  min-height: 100vh;
-  background-color: #030712;
-  color: #f3f4f6;
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-feature-settings: 'ss01', 'cv01';
+    margin: 0;
+    min-height: 100vh;
+    font-family: var(--font-sans), 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+}
+
+@layer utilities {
+  .glass {
+    background: linear-gradient(
+      160deg,
+      rgba(255, 255, 255, 0.06) 0%,
+      rgba(255, 255, 255, 0.02) 100%
+    );
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .glass-strong {
+    background: linear-gradient(
+      160deg,
+      rgba(255, 255, 255, 0.08) 0%,
+      rgba(255, 255, 255, 0.025) 100%
+    );
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .text-gradient {
+    background: linear-gradient(
+      100deg,
+      #ffffff 0%,
+      #e4ffb0 45%,
+      #c9f74a 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
+
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate3d(4%, -3%, 0) scale(1.08);
+  }
+}
+
+@keyframes drift-alt {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1.05);
+  }
+
+  50% {
+    transform: translate3d(-5%, 4%, 0) scale(1);
+  }
+}
+
+.animate-drift {
+  animation: drift 24s ease-in-out infinite;
+}
+
+.animate-drift-alt {
+  animation: drift-alt 28s ease-in-out infinite;
 }
 
 /* Custom scrollbars */
@@ -21,14 +127,14 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #0b0f19;
+  background: #060309;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
+  background: rgba(255, 255, 255, 0.15);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: rgba(255, 255, 255, 0.25);
 }

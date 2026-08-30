@@ -1,4 +1,6 @@
-export function GradientMesh() {
+import React from 'react';
+
+export const GradientMesh: React.FC = () => {
   return (
     <div
       aria-hidden="true"
@@ -74,5 +76,5 @@ export function GradientMesh() {
       {/* light top vignette for nav legibility */}
       <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-background/50 to-transparent" />
     </div>
-  )
-}
+  );
+};

@@ -11,13 +11,14 @@ __pycache__/
 build/
 develop-eggs/
 dist/
+/dist/
+frontend/dist/
 downloads/
 eggs/
 .eggs/
-lib/
-lib64/
+/lib/
+/lib64/
 parts/
-sdist/
 var/
 wheels/
 share/python-wheels/
@@ -165,19 +166,16 @@ zk-circuits/extreme_*.json
 
 # Node & Frontend
 node_modules/
+frontend/node_modules/
 .vite/
+frontend/.vite/
+frontend/dist/
 
-# Markdown files whitelist (track documentation, ignore temp markdown)
-*.md
-!README.md
-!PLAN.md
-!AGENTS.md
-!mergingplan.md
-!CRYPTO_REMAINING_PLAN.md
-!AI_LEAD_EXECUTION_PLAN.md
-!zk-circuits/CIRCUIT_MANIFEST.md
-!contracts/ZK_APPRAISAL_VERIFIER_SPEC.md
-!ai-engine/README.md
-!reports/*.md
-!.agents/**/*.md
-!docs-pitch/*.md
+# Graphify Cache
+graphify-out/cache/
+
+# Scratch & working markdown files
+frontend-fix.md
+improvedplanbackend.md
+*.tmp
+*.bak

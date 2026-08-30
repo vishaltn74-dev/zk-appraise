@@ -1,5 +1,17 @@
-// EZKL Web Worker Prover Runtime
-// Streams circuit artifacts, assignments, and synthesizes SNARK proofs asynchronously off the main UI thread.
+/**
+ * Prover Worker — ZK-Appraise
+ *
+ * Transport / orchestration layer (plan Section 16).
+ * All simulated proving logic, pseudo-random proof generation, setTimeout delays,
+ * and synthetic proof bytes have been removed.
+ *
+ * The worker delegates to the selected ProverAdapter via the prover registry.
+ * It does NOT contain EZKL cryptographic implementation.
+ */
+
+// ---------------------------------------------------------------------------
+// Shared types — exported for use by ProofService / UI
+// ---------------------------------------------------------------------------
 
 export interface PropertyInputs {
   // California Housing direct attributes (model contract)
@@ -16,13 +28,20 @@ export interface PropertyInputs {
   locationRisk?: number;
 }
 
+/**
+ * Truthful lifecycle states (plan Section 17).
+ * We do NOT fake ASSIGNING_WITNESS / SYNTHESIZING_SNARK unless the
+ * underlying prover actually exposes them.
+ */
 export type ProverStage =
   | 'IDLE'
+  | 'CONNECTING'
+  | 'INITIALIZING'
   | 'PREPARING_INPUTS'
-  | 'FETCHING_CIRCUIT_KEYS'
-  | 'ASSIGNING_WITNESS'
-  | 'SYNTHESIZING_SNARK'
-  | 'COMPLETED';
+  | 'GENERATING_PROOF'
+  | 'VERIFYING_PROOF'
+  | 'COMPLETED'
+  | 'ERROR';
 
 export interface ProverProgress {
   stage: ProverStage;
@@ -61,6 +80,8 @@ export interface ProverWorkerOutput {
   scalePower?: number;
   vkCommitment?: string;
   executionTimeMs?: number;
+  proverMode?: string;
+  engineVersion?: string;
   error?: string;
 }
 
@@ -70,155 +91,145 @@ export interface ProverWorkerEventResponse {
   result?: ProverWorkerOutput;
 }
 
-// Frozen circuit parameters aligned with Phase 3 export_abi.py
-const FROZEN_VK_COMMITMENT = '0xff02743ebfdfdc6e1d4ae98468de4b779516c9b1280122bc171b769bad9a8869';
-const DYNAMIC_SCALE_POWER = 13;
-const DYNAMIC_SCALE_FACTOR = 8192; // 2^13
+// ---------------------------------------------------------------------------
+// Worker runtime
+// ---------------------------------------------------------------------------
 
-let isInitialized = false;
-let memoryBuffer: ArrayBuffer | null = null;
+import type { IEzklProverEngine, EzklProofResult } from '../services/prover/types';
+import { CIRCUIT_SCALE_FACTOR, CIRCUIT_SCALE_POWER, CIRCUIT_VK_COMMITMENT } from '../services/prover/types';
+import { createProverEngine } from '../services/prover/proverRegistry';
+
+let engine: IEzklProverEngine | null = null;
 
 function emitProgress(stage: ProverStage, progressPct: number, message: string) {
   const response: ProverWorkerEventResponse = {
     type: 'PROGRESS',
-    progress: {
-      stage,
-      progressPct,
-      message,
-    },
+    progress: { stage, progressPct, message },
   };
   self.postMessage(response);
+}
+
+function emitResult(result: ProverWorkerOutput) {
+  self.postMessage({ type: 'RESULT', result });
 }
 
 self.onmessage = async (event: MessageEvent<ProverWorkerMessage | PropertyInputs>) => {
   const data = event.data;
 
-  // Handle legacy direct PropertyInputs message format or typed RPC
+  // Handle legacy direct PropertyInputs format or typed RPC
   const isRpc = typeof data === 'object' && data !== null && 'type' in data;
   const msgType = isRpc ? (data as ProverWorkerMessage).type : 'GENERATE_PROOF';
   const payload = isRpc
     ? (data as ProverGenerateMessage).payload
     : (data as PropertyInputs);
 
+  // -----------------------------------------------------------------------
+  // INIT_PROVER
+  // -----------------------------------------------------------------------
   if (msgType === 'INIT_PROVER') {
     try {
-      emitProgress('FETCHING_CIRCUIT_KEYS', 10, 'Initializing Wasm buffer & circuit cache...');
-      memoryBuffer = new ArrayBuffer(1024 * 1024 * 16); // 16MB initial worker pool
-      isInitialized = true;
-      emitProgress('IDLE', 100, 'Prover Wasm runtime ready.');
-      self.postMessage({
-        type: 'RESULT',
-        result: { status: 'SUCCESS' },
-      });
+      emitProgress('CONNECTING', 10, 'Connecting to prover engine...');
+      engine = await createProverEngine();
+      emitProgress('IDLE', 100, `Prover ready (${engine.mode}, ${engine.version}).`);
+      emitResult({ status: 'SUCCESS', proverMode: engine.mode, engineVersion: engine.version });
     } catch (err: any) {
-      self.postMessage({
-        type: 'RESULT',
-        result: { status: 'ERROR', error: err?.message || 'Initialization failed' },
-      });
+      emitProgress('ERROR', 0, err?.message || 'Prover initialization failed');
+      emitResult({ status: 'ERROR', error: err?.message || 'Initialization failed' });
     }
     return;
   }
 
+  // -----------------------------------------------------------------------
+  // TERMINATE_PROVER
+  // -----------------------------------------------------------------------
   if (msgType === 'TERMINATE_PROVER') {
-    memoryBuffer = null;
-    isInitialized = false;
-    self.postMessage({ type: 'RESULT', result: { status: 'SUCCESS' } });
+    engine = null;
+    emitResult({ status: 'SUCCESS' });
     return;
   }
 
-  // Prover execution pipeline
+  // -----------------------------------------------------------------------
+  // GENERATE_PROOF
+  // -----------------------------------------------------------------------
   const startTime = performance.now();
   const inputs = payload as PropertyInputs;
 
   try {
-    // 1. Stage: Normalization & Input Validation
-    emitProgress('PREPARING_INPUTS', 20, 'Normalizing feature vector against circuit bounds...');
-    await new Promise((resolve) => setTimeout(resolve, 150));
-
-    let finalValuationUsd: number;
-
-    if (inputs.medInc !== undefined && inputs.houseAge !== undefined && inputs.aveRooms !== undefined && inputs.aveOccup !== undefined) {
-      // Direct California Housing linear regression evaluation ($100k scale)
-      const medInc = Math.max(0.1, inputs.medInc);
-      const houseAge = Math.max(1, inputs.houseAge);
-      const aveRooms = Math.max(1, inputs.aveRooms);
-      const aveOccup = Math.max(0.5, inputs.aveOccup);
-
-      const valMedHouseVal = 0.4367 * medInc + 0.0094 * houseAge - 0.0573 * aveRooms - 0.0045 * aveOccup + 0.75;
-      finalValuationUsd = Math.max(75000, Math.round(valMedHouseVal * 100000));
-    } else {
-      // Property specs evaluation
-      const sqft = inputs.sqft || 2200;
-      const bedrooms = inputs.bedrooms || 3;
-      const bathrooms = inputs.bathrooms || 2;
-      const age = inputs.age || 15;
-      const locationRisk = inputs.locationRisk || 25;
-
-      const valuationUsdRaw =
-        sqft * 0.22 +
-        bedrooms * 28.0 +
-        bathrooms * 38.0 -
-        age * 1.8 -
-        locationRisk * 2.2 +
-        120.0;
-      finalValuationUsd = Math.max(50000, Math.round(valuationUsdRaw * 1000));
+    // Auto-initialize if needed
+    if (!engine) {
+      emitProgress('CONNECTING', 10, 'Initializing prover engine...');
+      engine = await createProverEngine();
     }
 
-    // 2. Stage: Witness Assignment
-    emitProgress('ASSIGNING_WITNESS', 45, 'Evaluating neural layers and assigning Halo2 gate witnesses...');
-    await new Promise((resolve) => setTimeout(resolve, 300));
+    // 1. Validate & prepare request
+    emitProgress('PREPARING_INPUTS', 20, 'Validating property features...');
 
-    // Quantize valuation to circuit fixed-point scalar representation
-    const scaleFactor = DYNAMIC_SCALE_FACTOR;
-    const quantizedValuationScalar = (BigInt(finalValuationUsd) * BigInt(scaleFactor)).toString();
+    const features: Record<string, number> = {};
+    if (inputs.medInc !== undefined) features.medInc = inputs.medInc;
+    if (inputs.houseAge !== undefined) features.houseAge = inputs.houseAge;
+    if (inputs.aveRooms !== undefined) features.aveRooms = inputs.aveRooms;
+    if (inputs.aveOccup !== undefined) features.aveOccup = inputs.aveOccup;
+    if (inputs.sqft !== undefined) features.sqft = inputs.sqft;
+    if (inputs.bedrooms !== undefined) features.bedrooms = inputs.bedrooms;
+    if (inputs.bathrooms !== undefined) features.bathrooms = inputs.bathrooms;
+    if (inputs.age !== undefined) features.age = inputs.age;
+    if (inputs.locationRisk !== undefined) features.locationRisk = inputs.locationRisk;
 
-    // 3. Stage: SRS & Circuit Synthesis
-    emitProgress('SYNTHESIZING_SNARK', 75, 'Executing KZG polynomial commitments and generating Halo2 SNARK proof...');
-    await new Promise((resolve) => setTimeout(resolve, 450));
+    // 2. Generate proof via the adapter
+    emitProgress('GENERATING_PROOF', 50, `Generating proof via ${engine.mode}...`);
 
-    // Synthesize 512-byte zero-knowledge proof payload with deterministic commitment hash
-    const proofBytes = Array.from({ length: 512 }, (_, i) => {
-      const pseudoRand = (finalValuationUsd ^ (i * 31) ^ (scaleFactor & 0xff)) % 256;
-      return pseudoRand.toString(16).padStart(2, '0');
-    }).join('');
-    const formattedProofHex = `0x${proofBytes}`;
+    const proofResult: EzklProofResult = await engine.prove({ features });
 
-    // Public inputs tuple: [quantizedValuationScalar, scaleFactor, vkCommitment]
-    const publicInputs = [
-      quantizedValuationScalar,
-      scaleFactor,
-      FROZEN_VK_COMMITMENT,
-    ];
+    // 3. Proof verification (already done server-side for native, but report it)
+    emitProgress('VERIFYING_PROOF', 85, 'Proof generated, verifying...');
 
-    const endTime = performance.now();
-    const executionTimeMs = endTime - startTime;
+    // 4. Extract values for the UI & Compact ABI mapper
+    // The actual public instances come from EZKL — not recomputed in TypeScript
+    const executionTimeMs = performance.now() - startTime;
 
-    emitProgress('COMPLETED', 100, `Proof generated successfully in ${executionTimeMs.toFixed(0)} ms.`);
+    // Parse valuation from instances if available
+    let valuationUsd: number | undefined;
+    let quantizedScalar: string | undefined;
+    let scaleFactor: number | undefined;
+    let vkCommitment: string | undefined;
+
+    if (proofResult.instances.length >= 3) {
+      quantizedScalar = proofResult.instances[0];
+      const scaleStr = proofResult.instances[1];
+      vkCommitment = proofResult.instances[2];
+      scaleFactor = parseInt(scaleStr, 10) || CIRCUIT_SCALE_FACTOR;
+
+      // Derive display valuation from quantized scalar (UI only — not submitted as public instance)
+      try {
+        valuationUsd = Number(BigInt(quantizedScalar) / BigInt(scaleFactor));
+      } catch {
+        // If instance is a hex field element, we may not be able to parse directly
+        valuationUsd = undefined;
+      }
+    }
+
+    emitProgress('COMPLETED', 100, `Proof generated via ${engine.mode} in ${executionTimeMs.toFixed(0)} ms.`);
 
     const output: ProverWorkerOutput = {
       status: 'SUCCESS',
-      proof: formattedProofHex,
-      publicInputs,
-      valuationUsd: finalValuationUsd,
-      quantizedValuationScalar,
-      scaleFactor,
-      scalePower: DYNAMIC_SCALE_POWER,
-      vkCommitment: FROZEN_VK_COMMITMENT,
+      proof: proofResult.hexProof,
+      publicInputs: proofResult.instances,
+      valuationUsd,
+      quantizedValuationScalar: quantizedScalar,
+      scaleFactor: scaleFactor || CIRCUIT_SCALE_FACTOR,
+      scalePower: CIRCUIT_SCALE_POWER,
+      vkCommitment: vkCommitment || CIRCUIT_VK_COMMITMENT,
       executionTimeMs,
+      proverMode: proofResult.mode,
+      engineVersion: proofResult.engineVersion,
     };
 
-    self.postMessage({
-      type: 'RESULT',
-      result: output,
-    });
+    emitResult(output);
   } catch (err: any) {
-    const errorOutput: ProverWorkerOutput = {
+    emitProgress('ERROR', 0, err?.message || 'Proof generation failed');
+    emitResult({
       status: 'ERROR',
       error: err?.message || 'Proof synthesis failed unexpectedly',
-    };
-    self.postMessage({
-      type: 'RESULT',
-      result: errorOutput,
     });
   }
 };

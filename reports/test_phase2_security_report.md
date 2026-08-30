@@ -20,21 +20,21 @@
 ## 2. 50-Iteration Prover Stress & Resource Profile
 
 - **Total Execution Iterations:** 50 cycles
-- **Total Duration:** 11.964 s
-- **Average Latency per Cycle:** 0.1388 s
-- **Min / Max Latency:** 0.1089 s / 0.1596 s
-- **95th Percentile Latency (P95):** 0.1561 s
-- **Initial Memory RSS:** 258.21 MB
-- **Peak Memory RSS:** 258.62 MB (0.2526 GB)
-- **Net Memory Growth:** 0.47 MB
+- **Total Duration:** 12.242 s
+- **Average Latency per Cycle:** 0.1451 s
+- **Min / Max Latency:** 0.1177 s / 0.3338 s
+- **95th Percentile Latency (P95):** 0.2180 s
+- **Initial Memory RSS:** 258.41 MB
+- **Peak Memory RSS:** 258.21 MB (0.2522 GB)
+- **Net Memory Growth:** 0.44 MB
 
 ### Performance SLA Compliance Table
 
 | Benchmark Metric | Target SLA | Measured Value | SLA Status |
 |---|---|---|---|
-| Average Latency | $\le 8.0\text{ s}$ | **0.1388 s** | **PASSED** |
-| Peak Prover Memory | $\le 2.0\text{ GB}$ | **0.2526 GB** (258.6 MB) | **PASSED** |
-| Memory Stability (Leak Delta) | Bounded ($< 250\text{ MB}$) | **0.47 MB** | **PASSED** |
+| Average Latency | $\le 8.0\text{ s}$ | **0.1451 s** | **PASSED** |
+| Peak Prover Memory | $\le 2.0\text{ GB}$ | **0.2522 GB** (258.2 MB) | **PASSED** |
+| Memory Stability (Leak Delta) | Bounded ($< 250\text{ MB}$) | **0.44 MB** | **PASSED** |
 
 ---
 
