@@ -1,0 +1,45 @@
+# Python/runtime
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# IDE/OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Secrets/local config
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+
+# Generated model artifacts
+house_appraiser.onnx
+*.onnx
+*.onnx.data
+model_weights.json
+model_meta.json
+sample_input.json
+test_vectors.json
+checksums.json
+metrics.json
+health.json
+monitoring.json
+audit.jsonl
+artifacts/
+
+# Atomic/backup files
+*.tmp
+*.bak
+*.lock
+.ai-engine.lock
